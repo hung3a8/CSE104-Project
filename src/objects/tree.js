@@ -10,7 +10,6 @@ export class Tree extends CollisionSprite {
     constructor(container) {
         super(container);
         this.container = container;
-        this.level = 0;
         let x = getRandomInt(10);
         this.sprite.texture = spritesheet.textures["tree_" + x];
     }

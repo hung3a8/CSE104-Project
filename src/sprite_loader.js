@@ -36,9 +36,13 @@ export const atlasData = {
         player_3: get_frame(28, 0),
         player_4: get_frame(29, 0),
         player_5: get_frame(30, 0),
+
+        // Enemy
         enemy_0: get_frame(24, 1),
         enemy_1: get_frame(25, 1),
         enemy_2: get_frame(26, 1),
+
+        // Tree
         tree_0: get_frame(0, 1),
         tree_1: get_frame(1, 1),
         tree_2: get_frame(2, 1),
@@ -62,6 +66,22 @@ export const atlasData = {
         health_8: get_frame(27, 16),
         health_9: get_frame(28, 16),
         health_10: get_frame(29, 16),
+
+        // Orange house
+        orangehouse_0: get_frame(5, 12),
+        orangehouse_1: get_frame(6, 12),
+        orangehouse_2: get_frame(7, 12),
+        orangehouse_3: get_frame(5, 13),
+        orangehouse_4: get_frame(6, 13),
+        orangehouse_5: get_frame(7, 13),
+
+        // Wooden house
+        woodenhouse_0: get_frame(10, 15),
+        woodenhouse_1: get_frame(11, 15),
+        woodenhouse_2: get_frame(12, 15),
+        woodenhouse_3: get_frame(10, 16),
+        woodenhouse_4: get_frame(11, 16),
+        woodenhouse_5: get_frame(12, 16),
 
         // Info bars
         "top_bar_corner_left": get_frame(19, 15),
