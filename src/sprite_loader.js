@@ -96,6 +96,17 @@ export const atlasData = {
         woodenhouse_4: get_frame(11, 16),
         woodenhouse_5: get_frame(12, 16),
 
+        // Dirt
+        dirt_0: get_frame(1, 0),
+        dirt_1: get_frame(2, 0),
+        dirt_2: get_frame(3, 0),
+        dirt_3: get_frame(4, 0),
+
+        // Grass
+        grass_0: get_frame(5, 0),
+        grass_1: get_frame(6, 0),
+        grass_2: get_frame(7, 0),
+
         // Info bars
         "top_bar_corner_left": get_frame(19, 15),
         "top_bar": get_frame(20, 15),

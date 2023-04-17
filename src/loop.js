@@ -8,7 +8,7 @@ import { InfoContainer } from './containers/info.js';
 import { Sprite, Texture } from '../include/pixi.mjs';
 import { CONSTANT } from './constant.js';
 
-
+let bgContainer = Demo.bgcontainer;
 let currentContainer = Demo.container;
 const player = new Player(currentContainer);
 let infoContainer = new InfoContainer({
@@ -95,6 +95,7 @@ for(let _=0;_<10;_++){  // try to spawn wooden house
 window.container = currentContainer;
 
 export function setup() {
+    app.stage.addChild(bgContainer);
     app.stage.addChild(currentContainer);
     app.stage.addChild(infoContainer);
 }
