@@ -1,0 +1,11 @@
+export const CONSTANT = {
+    GRID_WIDTH: 25,
+    GRID_HEIGHT: 15,
+    GRID_SIZE: 64,
+    CANVAS_WIDTH: 25 * 64,
+    CANVAS_HEIGHT: 15 * 64,
+    GAME_WIDTH: 25 * 64,
+    GAME_HEIGHT: 13 * 64,
+    INFO_WIDTH: 25 * 64,
+    INFO_HEIGHT: 2 * 64,
+}
