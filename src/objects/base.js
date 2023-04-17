@@ -34,5 +34,10 @@ export class CollisionSprite extends BaseSprite {
 
     can_move(to_x, to_y) {
         // Get the object at position (x, y) in container
+        let obj = this.container.grids[to_x][to_y];
+        console.log(obj);
+        if (obj === null) {
+            return true;
+        }
     }
 }

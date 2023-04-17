@@ -11,12 +11,13 @@ const player = new Player(currentContainer);
 const dummy = new Sprite(Texture.WHITE);
 const dummy2 = new Sprite(Texture.WHITE);
 const dummyenemy = new Enemy(currentContainer);
+
 currentContainer.addChildAtPosition(dummy, 1, 1);
 currentContainer.addChildAtPosition(player.sprite, 0, 0);
 currentContainer.addChildAtPosition(dummy2, 9, 9);
 currentContainer.addChildAtPosition(dummyenemy.sprite, 5, 5);
 console.log(currentContainer.grids);
-
+console.log(player.can_move(0, 0));
 window.container = currentContainer;
 
 export function setup() {
