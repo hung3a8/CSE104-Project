@@ -36,6 +36,9 @@ export const atlasData = {
         player_3: get_frame(28, 0),
         player_4: get_frame(29, 0),
         player_5: get_frame(30, 0),
+        enemy_0: get_frame(24, 1),
+        enemy_1: get_frame(25, 1),
+        enemy_2: get_frame(26, 1),
     },
     meta: {
         image: 'sprites/tilesheet.png',
