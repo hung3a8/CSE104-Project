@@ -9,6 +9,8 @@ export class BaseSprite {
     attack = null;
     defense = null;
     container = null;
+    col = null;
+    row = null;
 
     constructor(container) {
         this.container = container;
@@ -32,12 +34,12 @@ export class CollisionSprite extends BaseSprite {
         super(container);
     }
 
-    can_move(to_x, to_y) {
+    can_move(to_col, to_row) {
         // Get the object at position (x, y) in container
-        let obj = this.container.grids[to_x][to_y];
-        console.log(obj);
+        let obj = this.container.grids[to_col][to_row];
         if (obj === null) {
             return true;
         }
+        return false;
     }
 }

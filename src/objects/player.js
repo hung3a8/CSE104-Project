@@ -53,26 +53,42 @@ export class Player extends CollisionSprite {
     }
 
     left_press() {
-        if (this.object.x > 0) {
+        if (this.object.x > 0 && this.object.can_move(this.object.row, this.object.col - 1)) {
             this.object.x -= 64;
+            this.object.container.grids[this.object.row][this.object.col] = null;
+            this.object.col -= 1;
+            this.object.container.grids[this.object.row][this.object.col] = this.object;
+            // console.table(this.object.container.grids);
         }
     }
 
     right_press() {
-        if (this.object.x < this.object.container.width - CONSTANT.GRID_SIZE) {
+        if (this.object.x < this.object.container.width - CONSTANT.GRID_SIZE && this.object.can_move(this.object.row, this.object.col + 1)) {
             this.object.x += 64;
+            this.object.container.grids[this.object.row][this.object.col] = null;
+            this.object.col += 1;
+            this.object.container.grids[this.object.row][this.object.col] = this.object;
+            // console.table(this.object.container.grids);
         }
     }
 
     up_press() {
-        if (this.object.y > 0) {
+        if (this.object.y > 0 && this.object.can_move(this.object.row - 1, this.object.col)) {
             this.object.y -= 64;
+            this.object.container.grids[this.object.row][this.object.col] = null;
+            this.object.row -= 1;
+            this.object.container.grids[this.object.row][this.object.col] = this.object;
+            // console.table(this.object.container.grids);
         }
     }
 
     down_press() {
-        if (this.object.y < this.object.container.height - CONSTANT.GRID_SIZE) {
+        if (this.object.y < this.object.container.height - CONSTANT.GRID_SIZE && this.object.can_move(this.object.row + 1, this.object.col)) {
             this.object.y += 64;
+            this.object.container.grids[this.object.row][this.object.col] = null;
+            this.object.row += 1;
+            this.object.container.grids[this.object.row][this.object.col] = this.object;
+            // console.table(this.object.container.grids);
         }
     }
 }
