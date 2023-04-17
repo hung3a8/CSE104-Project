@@ -93,6 +93,14 @@ export class InfoContainer extends BaseContainer {
         this.level_info = new LevelInfo({x: 32, y: 80, width: 200, height: 50, player: this.player});
         this.attack_info = new AttackInfo({x: 256, y: 48, width: 200, height: 50, player: this.player});
         this.defense_info = new DefenseInfo({x: 256, y: 80, width: 200, height: 50, player: this.player});
+
+        this.background = new PIXI.Sprite(spritesheet.textures["info_background"]);
+
+        const graphics = new PIXI.Graphics();
+        graphics.beginFill(0x000000);
+        graphics.drawRect(0, 16, this.width, this.height);
+        this.addChild(graphics);
+
         this.addChild(this.hit_point_info);
         this.addChild(this.level_info);
         this.addChild(this.attack_info);
