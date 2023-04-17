@@ -49,6 +49,23 @@ export const atlasData = {
         tree_7: get_frame(7, 1),
         tree_8: get_frame(0, 2),
         tree_9: get_frame(1, 2),
+
+        // Heath cards
+        health_0: get_frame(19, 16),
+        health_1: get_frame(20, 16),
+        health_2: get_frame(21, 16),
+        health_3: get_frame(22, 16),
+        health_4: get_frame(23, 16),
+        health_5: get_frame(24, 16),
+        health_6: get_frame(25, 16),
+        health_7: get_frame(26, 16),
+        health_8: get_frame(27, 16),
+        health_9: get_frame(28, 16),
+        health_10: get_frame(29, 16),
+
+        // Info bars
+        "top_bar_corner_left": get_frame(19, 15),
+        "top_bar": get_frame(20, 15),
     },
     meta: {
         image: 'sprites/tilesheet.png',

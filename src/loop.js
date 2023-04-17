@@ -3,13 +3,21 @@ import { Player } from './objects/player.js';
 import { Enemy } from './objects/enemy.js';
 import { Tree } from './objects/tree.js';
 import * as Demo from './containers/demo.js';
-import * as Info from './containers/info.js';
+import { InfoContainer } from './containers/info.js';
 import { Sprite, Texture } from '../include/pixi.mjs';
+import { CONSTANT } from './constant.js';
 
 
 let currentContainer = Demo.container;
-let infoContainer = Info.container;
 const player = new Player(currentContainer);
+let infoContainer = new InfoContainer({
+    x: 0,
+    y: CONSTANT.GAME_HEIGHT,
+    width: CONSTANT.INFO_WIDTH,
+    height: CONSTANT.INFO_HEIGHT,
+    player: player,
+});
+
 const dummy = new Sprite(Texture.WHITE);
 const dummy2 = new Sprite(Texture.WHITE);
 const dummyenemy = new Enemy(currentContainer);
@@ -43,4 +51,6 @@ export function setup() {
 export function gameLoop(delta) {
     currentContainer.position.x = -player.x + app.screen.width / 2;
     currentContainer.position.y = -player.y + app.screen.height / 2;
+
+    infoContainer.update();
 }

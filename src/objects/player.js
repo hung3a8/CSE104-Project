@@ -2,7 +2,7 @@ import * as PIXI from "../../include/pixi.mjs";
 import { CONSTANT } from '../constant.js';
 import { spritesheet } from "../sprite_loader.js";
 import { keyboard } from "../utils/keyboard.js";
-import { CollisionSprite } from "./base.js";
+import { BaseSprite, CollisionSprite } from "./base.js";
 
 
 export class Player extends CollisionSprite {
@@ -33,6 +33,7 @@ export class Player extends CollisionSprite {
             up: keyboard("ArrowUp", this),
             down: keyboard("ArrowDown", this),
             evolve: keyboard("e", this),
+            kms: keyboard("k", this),
         };
 
         this.action.left.press = this.left_press;
@@ -40,10 +41,15 @@ export class Player extends CollisionSprite {
         this.action.up.press = this.up_press;
         this.action.down.press = this.down_press;
         this.action.evolve.press = this.evolve_press;
+        this.action.kms.press = this.kms_press;
     }
 
     evolve_press() {
         this.object.evolve();
+    }
+
+    kms_press() {
+        this.object.hp = Math.max(this.object.hp - 10, 0);
     }
 
     left_press() {
@@ -68,5 +74,32 @@ export class Player extends CollisionSprite {
         if (this.object.y < this.object.container.height - CONSTANT.GRID_SIZE) {
             this.object.y += 64;
         }
+    }
+}
+
+
+export class HitPoint extends BaseSprite {
+    constructor(container) {
+        super(container);
+        this.container = container;
+        this.level = 0;
+
+        this.evolutions = [
+            spritesheet.textures["health_0"],
+            spritesheet.textures["health_1"],
+            spritesheet.textures["health_2"],
+            spritesheet.textures["health_3"],
+            spritesheet.textures["health_4"],
+            spritesheet.textures["health_5"],
+            spritesheet.textures["health_6"],
+            spritesheet.textures["health_7"],
+            spritesheet.textures["health_8"],
+            spritesheet.textures["health_9"],
+            spritesheet.textures["health_10"],
+        ];
+
+        this.sprite.texture = spritesheet.textures["health_0"];
+        this.x = 0;
+        this.y = 0;
     }
 }

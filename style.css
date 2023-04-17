@@ -15,3 +15,8 @@ body {
     right: 0;
     border: 1px solid grey;
 }
+
+@font-face {
+    font-family: "BitPotion";
+    src: url("assets/fonts/BitPotion.ttf");
+}
