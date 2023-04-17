@@ -3,13 +3,16 @@ import { CONSTANT } from '../constant.js';
 import { spritesheet } from "../sprite_loader.js";
 import { CollisionSprite } from "./base.js";
 
+function getRandomInt(max) {return Math.floor(Math.random() * max);}
+
 export class Enemy extends CollisionSprite {
     constructor(container) {
         super(container);
         this.container = container;
         this.level = 0;
 
-        this.sprite.texture = spritesheet.textures["enemy_0"];
+        let x = getRandomInt(16);
+        this.sprite.texture = spritesheet.textures["enemy_"+x];
 
         this.hp = 10;
         this.max_hp = 10;

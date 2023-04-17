@@ -21,16 +21,22 @@ let infoContainer = new InfoContainer({
 
 const dummy = new Sprite(Texture.WHITE);
 const dummy2 = new Sprite(Texture.WHITE);
-const dummyenemy = new Enemy(currentContainer);
 
 currentContainer.addChildAtPosition(dummy, 1, 1);
 currentContainer.addChildAtPosition(player.sprite, 0, 0);
 currentContainer.addChildAtPosition(dummy2, currentContainer.rows-1, currentContainer.cols-1);
-currentContainer.addChildAtPosition(dummyenemy.sprite, 5, 5);
 console.log(currentContainer.grids);
 
 function getRandomInt(max) {return Math.floor(Math.random() * max);}
 
+for(let i=0;i<5;i++){
+    let enemy = new Enemy(currentContainer);
+    let randomrow = getRandomInt(currentContainer.rows);
+    let randomcol = getRandomInt(currentContainer.cols);
+    if(currentContainer.grids[randomrow][randomcol] === null){
+        currentContainer.addChildAtPosition(enemy.sprite, randomrow, randomcol);
+    }
+}
 for(let i=0;i<10;i++){
     let tree = new Tree(currentContainer);
     let randomrow = getRandomInt(currentContainer.rows);
