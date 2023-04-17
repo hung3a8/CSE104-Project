@@ -46,4 +46,5 @@ export class GameContainer extends BaseContainer {
         child.y = row * GameContainer.GRID_SIZE;
         this.grids[row][col] = child;
     }
+
 }
