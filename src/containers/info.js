@@ -89,10 +89,10 @@ export class InfoContainer extends BaseContainer {
     constructor({x, y, width, height, player}) {
         super({x, y, width, height});
         this.player = player;
-        this.hit_point_info = new HitPointInfo({x: 32, y: 48, width: 200, height: 50, player: this.player});
-        this.level_info = new LevelInfo({x: 32, y: 80, width: 200, height: 50, player: this.player});
-        this.attack_info = new AttackInfo({x: 256, y: 48, width: 200, height: 50, player: this.player});
-        this.defense_info = new DefenseInfo({x: 256, y: 80, width: 200, height: 50, player: this.player});
+        this.hit_point_info = new HitPointInfo({x: 48, y: 48, width: 200, height: 50, player: this.player});
+        this.level_info = new LevelInfo({x: 48, y: 80, width: 200, height: 50, player: this.player});
+        this.attack_info = new AttackInfo({x: 272, y: 48, width: 200, height: 50, player: this.player});
+        this.defense_info = new DefenseInfo({x: 272, y: 80, width: 200, height: 50, player: this.player});
 
         this.background = new PIXI.Sprite(spritesheet.textures["info_background"]);
 
@@ -106,18 +106,32 @@ export class InfoContainer extends BaseContainer {
         this.addChild(this.attack_info);
         this.addChild(this.defense_info);
 
+        // Border
         const top_bar_corner_left = new PIXI.Sprite(spritesheet.textures["top_bar_corner_left"]);
+        top_bar_corner_left.x = -16;
         // create top bar corner right using flipX of top bar corner left
         const top_bar_corner_right = new PIXI.Sprite(spritesheet.textures["top_bar_corner_left"]);
         top_bar_corner_right.scale.x = -1;
-        top_bar_corner_right.x = CONSTANT.GRID_WIDTH * 64;
+        top_bar_corner_right.x = CONSTANT.GRID_WIDTH * 64 + 16;
         this.addChild(top_bar_corner_left);
         this.addChild(top_bar_corner_right);
-        for (let i = 0; i < CONSTANT.GRID_WIDTH - 2; i++) {
+        for (let i = 0; i < CONSTANT.GRID_WIDTH - 1; i++) {
             const top_bar = new PIXI.Sprite(spritesheet.textures["top_bar"]);
-            top_bar.x = (i + 1) * 64;
+            top_bar.x = (i + 1) * 64 - 16;
             this.addChild(top_bar);
         }
+        const left_vertical_bar = new PIXI.Sprite(spritesheet.textures["top_bar"]);
+        left_vertical_bar.rotation = Math.PI * 3 / 2;
+        left_vertical_bar.anchor.set(0.5, 0.5);
+        const right_vertical_bar = new PIXI.Sprite(spritesheet.textures["top_bar"]);
+        right_vertical_bar.rotation = Math.PI / 2;
+        right_vertical_bar.anchor.set(0.5, 0.5);
+        left_vertical_bar.x = 16;
+        left_vertical_bar.y = 96;
+        right_vertical_bar.x = CONSTANT.GRID_WIDTH * 64 - 16;
+        right_vertical_bar.y = 96;
+        this.addChild(left_vertical_bar);
+        this.addChild(right_vertical_bar);
     }
 
     update() {
