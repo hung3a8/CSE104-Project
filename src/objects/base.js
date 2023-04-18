@@ -12,6 +12,10 @@ export class BaseSprite {
     col = null;
     row = null;
 
+    // Interactions
+    interactions = [];
+    description = "";
+
     constructor(container) {
         this.container = container;
         this.sprite = new PIXI.Sprite();
@@ -27,6 +31,12 @@ export class BaseSprite {
         this.level = Math.min(this.level + delta, this.evolutions.length - 1);
         this.sprite.texture = this.evolutions[this.level];
     }
+
+    interactable() {
+        return this.interactions.length > 0;
+    }
+
+
 }
 
 export class CollisionSprite extends BaseSprite {
@@ -36,6 +46,9 @@ export class CollisionSprite extends BaseSprite {
 
     can_move(to_col, to_row) {
         // Get the object at position (x, y) in container
+        if (to_col < 0 || to_col >= this.container.cols || to_row < 0 || to_row >= this.container.rows) {
+            return false;
+        }
         let obj = this.container.grids[to_col][to_row];
         if (!(obj instanceof CollisionSprite)) {
             return true;

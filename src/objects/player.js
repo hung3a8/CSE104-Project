@@ -19,17 +19,18 @@ export class Player extends CollisionSprite {
         ];
 
         this.sprite.texture = this.evolutions[this.level];
-
+        this.description = "This is you.";
+        // Initial stats
         this.hp = 100;
         this.max_hp = 100;
         this.attack = 10;
         this.defense = 2;
+        this.range = 2;
+
+        this.cursor = null;
 
         this.action = {
-            // left: keyboard("ArrowLeft", this),
-            // right: keyboard("ArrowRight", this),
-            // up: keyboard("ArrowUp", this),
-            // down: keyboard("ArrowDown", this),
+            test_function: keyboard("t", this),
             evolve: keyboard("e", this),
             kms: keyboard("k", this),
         };
@@ -38,6 +39,7 @@ export class Player extends CollisionSprite {
         // this.action.right.press = this.right_press;
         // this.action.up.press = this.up_press;
         // this.action.down.press = this.down_press;
+        this.action.test_function.press = this.test_function_press;
         this.action.evolve.press = this.evolve_press;
         this.action.kms.press = this.kms_press;
     }
@@ -50,9 +52,46 @@ export class Player extends CollisionSprite {
         this.object.hp = Math.max(this.object.hp - 10, 0);
     }
 
+    test_function_press() {
+        this.object.getMovablePositions();
+        console.log(this.object.cursor);
+        console.log(this.object.getCursorPosition());
+    }
+
     interact(row, col) {
         const obj = this.container.getChildAtPosition(row, col);
         console.log("Interact with", obj);
+    }
+
+    setCursor(cursor) {
+        this.cursor = cursor;
+    }
+
+    getCursorPosition() {
+        if (this.cursor) {
+            return this.cursor.getPosition();
+        }
+        return null, null;
+    }
+
+    getMovablePositions() {
+        const _res = [];
+        for (let i = -this.range; i <= this.range; i++) {
+            for (let j = -this.range; j <= this.range; j++) {
+                if (this.can_move(this.col + i, this.row + j)) {
+                    // console.log(i, j);
+                    _res.push([i, j]);
+                }
+            }
+        }
+        return _res;
+    }
+
+    checkInRange(row, col) {
+        if (Math.abs(this.row - row) <= this.range && Math.abs(this.col - col) <= this.range) {
+            return true;
+        }
+        return false;
     }
 
     // left_press() {
@@ -107,6 +146,13 @@ export class PlayerCursor extends BaseSprite {
         this.col = player.col;
         this.sprite.texture = spritesheet.textures["cursor"];
 
+        this.tint = {
+            normal: 0xffffff,
+            interactable: 0x00ff00,
+        }
+
+        this.sprite.tint = 0xffffff;
+
         this.action = {
             left: keyboard("ArrowLeft", this),
             right: keyboard("ArrowRight", this),
@@ -122,6 +168,25 @@ export class PlayerCursor extends BaseSprite {
         this.action.down.press = this.down_press;
         this.action.back_to_player.press = this.back_to_player_press;
         this.action.interact.press = this.interact_press;
+    }
+
+    update() {
+        if (this.player.checkInRange(this.row, this.col)) {
+            this.sprite.tint = this.tint.interactable;
+        } else {
+            this.sprite.tint = this.tint.normal;
+        }
+    }
+
+    getDescription() {
+        if (this.container.getChildAtPosition(this.row, this.col)) {
+            return this.container.getChildAtPosition(this.row, this.col).description;
+        }
+        return "";
+    }
+
+    getPosition() {
+        return [this.row, this.col];
     }
 
     left_press() {

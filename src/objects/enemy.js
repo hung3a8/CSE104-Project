@@ -10,9 +10,10 @@ export class Enemy extends CollisionSprite {
         super(container);
         this.container = container;
         this.level = 0;
+        this.description = "This is an enemy. Scary!";
 
         let x = getRandomInt(16);
-        this.sprite.texture = spritesheet.textures["enemy_"+x];
+        this.sprite.texture = spritesheet.textures["enemy_" + x];
 
         this.hp = 10;
         this.max_hp = 10;

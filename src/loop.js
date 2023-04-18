@@ -22,6 +22,7 @@ let infoContainer = new InfoContainer({
 currentContainer.addChildAtPosition(player.sprite, 0, 0);
 const cursor = new PlayerCursor(currentContainer, player);
 currentContainer.addChild(cursor.sprite);
+player.setCursor(cursor);
 
 const dummyenemy = new Enemy(currentContainer);
 currentContainer.addChildAtPosition(dummyenemy.sprite, 5, 5);
@@ -106,5 +107,6 @@ export function gameLoop(delta) {
     currentContainer.position.x = -cursor.x + app.screen.width / 2;
     currentContainer.position.y = -cursor.y + app.screen.height / 2;
 
+    currentContainer.update();
     infoContainer.update();
 }

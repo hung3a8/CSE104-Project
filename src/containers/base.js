@@ -22,6 +22,17 @@ export class BaseContainer extends PIXI.Container {
     set x(value) { this.sprite.x = value; }
     get y() { return this.sprite.y; }
     set y(value) { this.sprite.y = value; }
+
+    update() {
+        for (let child of this.children) {
+            if (child.update) {
+                child.update();
+            }
+            else if (child.object && child.object.update) {
+                child.object.update();
+            }
+        }
+    }
 }
 
 
@@ -38,6 +49,13 @@ export class GameContainer extends BaseContainer {
         this.rows = rows;
         this.cols = cols;
         this.grids = Array.from(Array(rows), () => new Array(cols).fill(null));
+    }
+
+    update() {
+        // console.log(this.children);
+        for (let child of this.children) {
+            if (child.object.update) child.object.update();
+        }
     }
 
     getChildAtPosition(row, col) {
