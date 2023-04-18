@@ -141,3 +141,25 @@ export class InfoContainer extends BaseContainer {
         this.defense_info.update();
     }
 }
+
+export class InteractionContainer extends BaseContainer {
+    constructor({x, y, width, height, player}) {
+        super({x, y, width, height});
+        this.player = player;
+        this.interaction = new PIXI.Text(``, {
+            fontFamily: 'BitPotion',
+            fontSize: 48,
+            fill: 0x38d973,
+            align: 'center',
+        });
+        this.addChild(this.interaction);
+    }
+
+    update() {
+        if (this.player.interaction) {
+            this.interaction.text = this.player.interaction;
+        } else {
+            this.interaction.text = "";
+        }
+    }
+}

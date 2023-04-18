@@ -1,5 +1,5 @@
 import { app } from './main.js';
-import { Player } from './objects/player.js';
+import { Player, PlayerCursor } from './objects/player.js';
 import { Enemy } from './objects/enemy.js';
 import { Tree } from './objects/tree.js';
 import { OrangeHouse, WoodenHouse } from './objects/house.js';
@@ -19,9 +19,11 @@ let infoContainer = new InfoContainer({
     player: player,
 });
 
-const dummyenemy = new Enemy(currentContainer);
-
 currentContainer.addChildAtPosition(player.sprite, 0, 0);
+const cursor = new PlayerCursor(currentContainer, player);
+currentContainer.addChild(cursor.sprite);
+
+const dummyenemy = new Enemy(currentContainer);
 currentContainer.addChildAtPosition(dummyenemy.sprite, 5, 5);
 // console.log(currentContainer.grids);
 // console.log(player.can_move(0, 0));
@@ -61,7 +63,7 @@ for(let _=0;_<10;_++){  // try to spawn orange house
         for(let i=0;i<2;i++){
             for(let j=0;j<3;j++){
                 let dummy = new OrangeHouse(currentContainer, i*3+j);
-                console.log(dummy, randomrow+i, randomcol+j);
+                // console.log(dummy, randomrow+i, randomcol+j);
                 currentContainer.addChildAtPosition(dummy.sprite, randomrow+i, randomcol+j);
             }
         }
@@ -84,8 +86,8 @@ for(let _=0;_<10;_++){  // try to spawn wooden house
         for(let i=0;i<2;i++){
             for(let j=0;j<3;j++){
                 let dummy = new WoodenHouse(currentContainer, i*3+j);
-                console.log(dummy, randomrow+i, randomcol+j);
-                currentContainer.addChildAtPosition(dummy.sprite, randomrow+i, randomcol+j);
+                // console.log(dummy, randomrow+i, randomcol+j);
+                currentContainer.addChildAtPosition(dummy.sprite, randomrow + i, randomcol + j);
             }
         }
         break;
@@ -101,8 +103,8 @@ export function setup() {
 }
 
 export function gameLoop(delta) {
-    currentContainer.position.x = -player.x + app.screen.width / 2;
-    currentContainer.position.y = -player.y + app.screen.height / 2;
+    currentContainer.position.x = -cursor.x + app.screen.width / 2;
+    currentContainer.position.y = -cursor.y + app.screen.height / 2;
 
     infoContainer.update();
 }

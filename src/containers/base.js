@@ -40,6 +40,10 @@ export class GameContainer extends BaseContainer {
         this.grids = Array.from(Array(rows), () => new Array(cols).fill(null));
     }
 
+    getChildAtPosition(row, col) {
+        return this.grids[row][col];
+    }
+
     addChildAtPosition(child, row, col) {
         super.addChild(child);
         child.x = col * GameContainer.GRID_SIZE;
