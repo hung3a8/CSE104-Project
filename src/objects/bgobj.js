@@ -11,6 +11,7 @@ export class Grass extends BaseSprite {
         this.container = container;
         let x = getRandomInt(3);
         this.sprite.texture = spritesheet.textures["grass_" + x];
+        this.sprite.alpha = 0.5;
     }
 }
 
@@ -20,5 +21,6 @@ export class Dirt extends BaseSprite {
         this.container = container;
         let x = getRandomInt(4);
         this.sprite.texture = spritesheet.textures["dirt_" + x];
+        this.sprite.alpha = 0.5;
     }
 }

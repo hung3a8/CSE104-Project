@@ -7,7 +7,8 @@ export const container = new GameContainer({
     cols: 10,
 });
 
-export const  bgcontainer = new GameContainer({
+export const bgcontainer = new GameContainer({
     rows: 10,
     cols: 10,
 });
+
