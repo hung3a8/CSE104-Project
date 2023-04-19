@@ -40,67 +40,46 @@ for(let i=0;i<bgContainer.cols;i++){
 
 function getRandomInt(max) {return Math.floor(Math.random() * max);}
 
-for(let i=0;i<5;i++){
-    let enemy = new Enemy(currentContainer);
-    let randomrow = getRandomInt(currentContainer.rows);
-    let randomcol = getRandomInt(currentContainer.cols);
-    if(currentContainer.grids[randomrow][randomcol] === null){
-        currentContainer.addChildAtPosition(enemy.sprite, randomrow, randomcol);
-    }
-}
-for(let i=0;i<10;i++){
-    let tree = new Tree(currentContainer);
-    let randomrow = getRandomInt(currentContainer.rows);
-    let randomcol = getRandomInt(currentContainer.cols);
-    if(currentContainer.grids[randomrow][randomcol] === null){
-        currentContainer.addChildAtPosition(tree.sprite, randomrow, randomcol);
+function spawnEntity(total, Entity){
+    for(let _=0;_<total;_++){   // try to spawn "total" Entity
+        let entity = new Entity(currentContainer);
+        let randomrow = getRandomInt(currentContainer.rows);
+        let randomcol = getRandomInt(currentContainer.cols);
+        if(currentContainer.grids[randomrow][randomcol] === null){
+            currentContainer.addChildAtPosition(entity.sprite, randomrow, randomcol);
+        }
     }
 }
 
-for(let _=0;_<10;_++){  // try to spawn orange house
-    let randomrow = getRandomInt(currentContainer.rows - 1);
-    let randomcol = getRandomInt(currentContainer.cols - 2);
-    let block = false;
-    for(let i=0;i<2;i++){
-        for(let j=0;j<3;j++){
-            if(currentContainer.grids[randomrow+i][randomcol+j] !== null){
-                block = true;
-            }
-        }
-    }
-    if(!block){
+spawnEntity(10, Enemy);
+spawnEntity(10, Tree);
+
+function spawnHouse(House){
+    for(let _=0;_<10;_++){  // try to spawn orange house
+        let randomrow = getRandomInt(currentContainer.rows - 1);
+        let randomcol = getRandomInt(currentContainer.cols - 2);
+        let block = false;
         for(let i=0;i<2;i++){
             for(let j=0;j<3;j++){
-                let dummy = new OrangeHouse(currentContainer, i*3+j);
-                currentContainer.addChildAtPosition(dummy.sprite, randomrow+i, randomcol+j);
+                if(currentContainer.grids[randomrow+i][randomcol+j] !== null){
+                    block = true;
+                }
             }
         }
-        break;
+        if(!block){
+            for(let i=0;i<2;i++){
+                for(let j=0;j<3;j++){
+                    let dummy = new House(currentContainer, i*3+j);
+                    currentContainer.addChildAtPosition(dummy.sprite, randomrow+i, randomcol+j);
+                }
+            }
+            break;
+        }
     }
 }
 
-for(let _=0;_<10;_++){  // try to spawn wooden house
-    let randomrow = getRandomInt(currentContainer.rows - 1);
-    let randomcol = getRandomInt(currentContainer.cols - 2);
-    let block = false;
-    for(let i=0;i<2;i++){
-        for(let j=0;j<3;j++){
-            if(currentContainer.grids[randomrow+i][randomcol+j] !== null){
-                block = true;
-            }
-        }
-    }
-    if(!block){
-        for(let i=0;i<2;i++){
-            for(let j=0;j<3;j++){
-                let dummy = new WoodenHouse(currentContainer, i*3+j);
-                currentContainer.addChildAtPosition(dummy.sprite, randomrow + i, randomcol + j);
-            }
-        }
-        break;
-    }
-}
-
+spawnHouse(OrangeHouse);
+spawnHouse(WoodenHouse);
 
 function checkSpawnable(row, col){
     if(row < 0 || row >= bgContainer.rows || col < 0 || col >= bgContainer.cols){return false;}
@@ -110,30 +89,48 @@ function checkSpawnable(row, col){
     return false;
 }
 
-function spawnBg(sprite, beginRow, beginCol, spawnRate){
+function spawnBg(sprite, beginRow, beginCol, decayRate=0.85){
     if(!checkSpawnable(beginRow, beginCol)){return 0;}
-    let dx = [0, 1, 0, -1];
-    let dy = [-1, 0, 1, 0];
+    let spawnRate = 1;
+    let dx = [0, 1, 0, -1, 1, 1, -1, -1];
+    let dy = [-1, 0, 1, 0, 1, -1, 1, -1];
     let stack = [];
     stack.push({row: beginRow, col: beginCol});
     while(stack.length > 0){
         let pos = stack.pop();
         let dummy = new sprite(bgContainer);
         bgContainer.addChildAtPosition(dummy.sprite, pos.row, pos.col);
-        for(let i=0;i<4;i++){
+        for(let i=0;i<dx.length;i++){
             let newrow = pos.row + dx[i];
             let newcol = pos.col + dy[i];
             if(checkSpawnable(newrow, newcol)){
                 let chance = Math.random();
                 if(chance > spawnRate){continue;}
+                spawnRate *= decayRate;
+                console.log(spawnRate);
                 stack.push({row: newrow, col: newcol});
             }
         }
     }
 }
+
 for(let i=0;i<2;i++){
-    spawnBg(Grass, getRandomInt(bgContainer.rows), getRandomInt(bgContainer.cols), 0.4);
-    spawnBg(Dirt, getRandomInt(bgContainer.rows), getRandomInt(bgContainer.cols), 0.4);
+    while(true){
+        let randomrow = getRandomInt(bgContainer.rows);
+        let randomcol = getRandomInt(bgContainer.cols);
+        if(checkSpawnable(randomrow, randomcol)){
+            spawnBg(Grass, randomrow, randomcol);
+            break;
+        }
+    }
+    while(true){
+        let randomrow = getRandomInt(bgContainer.rows);
+        let randomcol = getRandomInt(bgContainer.cols);
+        if(checkSpawnable(randomrow, randomcol)){
+            spawnBg(Dirt, randomrow, randomcol);
+            break;
+        }
+    }
 }
 
 window.container = currentContainer;
