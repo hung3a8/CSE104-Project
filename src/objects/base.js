@@ -13,7 +13,7 @@ export class BaseSprite {
     row = null;
 
     // Interactions
-    interactions = [];
+    interactions = {};
     description = "";
 
     constructor(container) {
@@ -32,11 +32,9 @@ export class BaseSprite {
         this.sprite.texture = this.evolutions[this.level];
     }
 
-    interactable() {
+    get interactable() {
         return this.interactions.length > 0;
     }
-
-
 }
 
 export class CollisionSprite extends BaseSprite {

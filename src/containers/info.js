@@ -85,6 +85,25 @@ class DefenseInfo extends TextInfo {
     }
 }
 
+
+class RangeInfo extends TextInfo {
+    constructor({x, y, width, height, player}) {
+        super({x, y, width, height, player});
+        this.text = new PIXI.Text(`RANGE: ${this.player.range}`, {
+            fontFamily: 'BitPotion',
+            fontSize: 48,
+            fill: 0x38d973,
+            align: 'center',
+        });
+        this.addChild(this.text);
+    }
+
+    update() {
+        this.text.text = `RANGE: ${this.player.range}`;
+    }
+}
+
+
 export class DescriptionContainer extends TextInfo {
     description = "";
     constructor({x, y, width, height, player}) {
@@ -94,7 +113,7 @@ export class DescriptionContainer extends TextInfo {
             fontSize: 48,
             fill: 0xff0000,
             wordWrap: true,
-            wordWrapWidth: 1200,
+            wordWrapWidth: 1000,
         });
         this.addChild(this.text);
     }
@@ -112,7 +131,8 @@ export class InfoContainer extends BaseContainer {
         this.level_info = new LevelInfo({x: 48, y: 80, width: 200, height: 50, player: this.player});
         this.attack_info = new AttackInfo({x: 272, y: 48, width: 200, height: 50, player: this.player});
         this.defense_info = new DefenseInfo({x: 272, y: 80, width: 200, height: 50, player: this.player});
-        this.description = new DescriptionContainer({x: 400, y: 48, width: 200, height: 50, player: this.player});
+        this.range_info = new RangeInfo({x: 400, y: 48, width: 200, height: 50, player: this.player});
+        this.description = new DescriptionContainer({x: 544, y: 48, width: 200, height: 50, player: this.player});
 
         this.background = new PIXI.Sprite(spritesheet.textures["info_background"]);
 
@@ -125,6 +145,7 @@ export class InfoContainer extends BaseContainer {
         this.addChild(this.level_info);
         this.addChild(this.attack_info);
         this.addChild(this.defense_info);
+        this.addChild(this.range_info);
         this.addChild(this.description);
 
         // Border
@@ -154,13 +175,6 @@ export class InfoContainer extends BaseContainer {
         this.addChild(left_vertical_bar);
         this.addChild(right_vertical_bar);
     }
-
-    // update() {
-    //     this.hit_point_info.update();
-    //     this.level_info.update();
-    //     this.attack_info.update();
-    //     this.defense_info.update();
-    // }
 }
 
 

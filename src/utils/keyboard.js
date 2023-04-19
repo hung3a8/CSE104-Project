@@ -1,4 +1,4 @@
-export function keyboard(value, assigned_object) {
+export function keyboard(value, assigned_object, lock) {
     const key = {};
     key.value = value;
     key.isDown = false;
@@ -6,9 +6,10 @@ export function keyboard(value, assigned_object) {
     key.press = undefined;
     key.release = undefined;
     key.object = assigned_object;
+    key.lock = lock;
 
     key.downHandler = (event) => {
-        if (event.key === key.value) {
+        if (event.key === key.value && !key.lock) {
             if (key.isUp && key.press) {
                 key.press();
             }
@@ -19,7 +20,7 @@ export function keyboard(value, assigned_object) {
     };
 
     key.upHandler = (event) => {
-        if (event.key === key.value) {
+        if (event.key === key.value && !key.lock) {
             if (key.isDown && key.release) {
                 key.release();
             }

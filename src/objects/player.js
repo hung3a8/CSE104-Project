@@ -52,15 +52,32 @@ export class Player extends CollisionSprite {
         this.object.hp = Math.max(this.object.hp - 10, 0);
     }
 
+    interact(row, col) {
+        if (this.checkInRange(row, col)) {
+            let obj = this.container.grids[row][col];
+            if (obj instanceof CollisionSprite && obj.interactable) {
+                obj.interact(this);
+            } else {
+                for (let pos of this.getMovablePositions()) {
+                    if (pos[0] == row && pos[1] == col) {
+                        this.container.grids[this.row][this.col] = null;
+                        this.row = row;
+                        this.col = col;
+                        this.container.grids[this.row][this.col] = this;
+                        this.x = this.col * CONSTANT.GRID_SIZE;
+                        this.y = this.row * CONSTANT.GRID_SIZE;
+                        console.table(this.container.grids);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
     test_function_press() {
         this.object.getMovablePositions();
         console.log(this.object.cursor);
         console.log(this.object.getCursorPosition());
-    }
-
-    interact(row, col) {
-        const obj = this.container.getChildAtPosition(row, col);
-        console.log("Interact with", obj);
     }
 
     setCursor(cursor) {
@@ -76,13 +93,25 @@ export class Player extends CollisionSprite {
 
     getMovablePositions() {
         const _res = [];
-        for (let i = -this.range; i <= this.range; i++) {
-            for (let j = -this.range; j <= this.range; j++) {
-                if (this.can_move(this.col + i, this.row + j)) {
-                    // console.log(i, j);
-                    _res.push([i, j]);
-                }
-            }
+        for (let i = -1; i >= -this.range; i--) {
+            if (this.can_move(this.row + i, this.col)) {
+                _res.push([this.row + i, this.col]);
+            } else break;
+        }
+        for (let i = 1; i <= this.range; i++) {
+            if (this.can_move(this.row + i, this.col)) {
+                _res.push([this.row + i, this.col]);
+            } else break;
+        }
+        for (let i = -1; i >= -this.range; i--) {
+            if (this.can_move(this.row, this.col + i)) {
+                _res.push([this.row, this.col + i]);
+            } else break;
+        }
+        for (let i = 1; i <= this.range; i++) {
+            if (this.can_move(this.row, this.col + i)) {
+                _res.push([this.row, this.col + i]);
+            } else break;
         }
         return _res;
     }
@@ -149,6 +178,7 @@ export class PlayerCursor extends BaseSprite {
         this.tint = {
             normal: 0xffffff,
             interactable: 0x00ff00,
+            not_interactable: 0xff0000,
         }
 
         this.sprite.tint = 0xffffff;
@@ -172,7 +202,13 @@ export class PlayerCursor extends BaseSprite {
 
     update() {
         if (this.player.checkInRange(this.row, this.col)) {
-            this.sprite.tint = this.tint.interactable;
+            if (this.container.grids[this.row][this.col] && this.container.grids[this.row][this.col].interactable) {
+                this.sprite.tint = this.tint.interactable;
+            } else if (this.container.grids[this.row][this.col] && !this.container.grids[this.row][this.col].interactable) {
+                this.sprite.tint = this.tint.not_interactable;
+            } else {
+                this.sprite.tint = this.tint.interactable;  // Movable actually
+            }
         } else {
             this.sprite.tint = this.tint.normal;
         }
@@ -224,6 +260,5 @@ export class PlayerCursor extends BaseSprite {
 
     interact_press() {
         this.object.player.interact(this.object.row, this.object.col);
-        // console.table(this.object.container.grids);
     }
 }
