@@ -256,6 +256,8 @@ export class PlayerCursor extends BaseSprite {
     back_to_player_press() {
         this.object.x = this.object.player.x;
         this.object.y = this.object.player.y;
+        this.object.row = this.object.player.row;
+        this.object.col = this.object.player.col;
     }
 
     interact_press() {
