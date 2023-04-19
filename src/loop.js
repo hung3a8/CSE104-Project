@@ -110,7 +110,6 @@ function spawnBg(sprite, beginRow, beginCol, decayRate=0.85){
                 let chance = Math.random();
                 if(chance > spawnRate){continue;}
                 spawnRate *= decayRate;
-                console.log(spawnRate);
                 stack.push({row: newrow, col: newcol});
             }
         }

@@ -8,6 +8,7 @@ export class OrangeHouse extends CollisionSprite {
         super(container);
         this.container = container;
         this.sprite.texture = spritesheet.textures["orangehouse_" + id];
+        this.description = "This is an orange house. It's orange.";
     }
 }
 
@@ -16,5 +17,6 @@ export class WoodenHouse extends CollisionSprite {
         super(container);
         this.container = container;
         this.sprite.texture = spritesheet.textures["woodenhouse_" + id];
+        this.description = "This is a wooden house. It's wooden.";
     }
 }

@@ -40,7 +40,7 @@ export const atlasData = {
         cursor: get_frame(29, 14),
 
         // Enemy
-        enemy_0: get_frame(24, 1),
+        enemy_0: get_frame(24, 0),
         enemy_1: get_frame(25, 1),
         enemy_2: get_frame(26, 1),
         enemy_3: get_frame(27, 1),

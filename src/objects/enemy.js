@@ -5,6 +5,25 @@ import { CollisionSprite } from "./base.js";
 
 function getRandomInt(max) {return Math.floor(Math.random() * max);}
 
+let enemyStat = [
+                    {name: 'Wiliam', hp: 100, atk: 10, def: 3},
+                    {name: 'cd', hp: 100, atk: 10, def: 3},
+                    {name: 'ef', hp: 100, atk: 10, def: 3},
+                    {name: 'gh', hp: 100, atk: 10, def: 3},
+                    {name: 'ij', hp: 100, atk: 10, def: 3},
+                    {name: 'kl', hp: 100, atk: 10, def: 3},
+                    {name: 'mn', hp: 100, atk: 10, def: 3},
+                    {name: 'op', hp: 100, atk: 10, def: 3},
+                    {name: 'qr', hp: 100, atk: 10, def: 3},
+                    {name: 'st', hp: 100, atk: 10, def: 3},
+                    {name: 'uv', hp: 100, atk: 10, def: 3},
+                    {name: 'wx', hp: 100, atk: 10, def: 3},
+                    {name: 'yz', hp: 100, atk: 10, def: 3},
+                    {name: 'ac', hp: 100, atk: 10, def: 3},
+                    {name: 'ad', hp: 100, atk: 10, def: 3},
+                    {name: 'af', hp: 100, atk: 10, def: 3},
+                ]; 
+
 export class Enemy extends CollisionSprite {
     constructor(container) {
         super(container);
