@@ -20,10 +20,23 @@ let infoContainer = new InfoContainer({
     player: player,
 });
 
-currentContainer.addChildAtPosition(player.sprite, 0, 0);
+currentContainer.addChildAtPosition(player.sprite, 1, 1);
 const cursor = new PlayerCursor(currentContainer, player);
 currentContainer.addChild(cursor.sprite);
 player.setCursor(cursor);
+
+for(let i=0;i<bgContainer.rows;i++){
+    let tree = new Tree(bgContainer);
+    currentContainer.addChildAtPosition(tree.sprite, i, 0);
+    tree = new Tree(bgContainer);
+    currentContainer.addChildAtPosition(tree.sprite, i, bgContainer.cols-1);
+}
+for(let i=0;i<bgContainer.cols;i++){
+    let tree = new Tree(bgContainer);
+    currentContainer.addChildAtPosition(tree.sprite, 0, i);
+    tree = new Tree(bgContainer);
+    currentContainer.addChildAtPosition(tree.sprite, bgContainer.rows-1, i);
+}
 
 function getRandomInt(max) {return Math.floor(Math.random() * max);}
 

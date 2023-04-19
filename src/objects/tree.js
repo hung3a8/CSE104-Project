@@ -11,7 +11,7 @@ export class Tree extends CollisionSprite {
         super(container);
         this.container = container;
         this.description = "Just a tree. Nothing to see here.";
-        let x = getRandomInt(10);
+        let x = getRandomInt(9);
         this.sprite.texture = spritesheet.textures["tree_" + x];
     }
 }

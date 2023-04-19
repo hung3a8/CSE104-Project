@@ -65,9 +65,8 @@ export const atlasData = {
         tree_4: get_frame(4, 1),
         tree_5: get_frame(5, 1),
         tree_6: get_frame(6, 1),
-        tree_7: get_frame(7, 1),
-        tree_8: get_frame(0, 2),
-        tree_9: get_frame(1, 2),
+        tree_7: get_frame(3, 2),
+        tree_8: get_frame(4, 2),
 
         // Orange house
         orangehouse_0: get_frame(5, 12),
