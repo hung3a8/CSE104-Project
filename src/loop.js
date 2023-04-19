@@ -25,6 +25,9 @@ const cursor = new PlayerCursor(currentContainer, player);
 currentContainer.addChild(cursor.sprite);
 player.setCursor(cursor);
 
+let ene = new Enemy(currentContainer);
+currentContainer.addChildAtPosition(ene.sprite, 2, 1);
+
 for(let i=0;i<bgContainer.rows;i++){
     let tree = new Tree(bgContainer);
     currentContainer.addChildAtPosition(tree.sprite, i, 0);
