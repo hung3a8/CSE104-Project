@@ -1,5 +1,6 @@
 import * as PIXI from '../include/pixi.mjs';
 import { CONSTANT } from './constant.js';
+import * as FontFaceObserver from '../include/fontfaceobserver.js';
 import { setup, gameLoop } from './loop.js';
 
 const mainCanvas = document.getElementById('game-canvas');
@@ -11,9 +12,13 @@ export const app = new PIXI.Application({
     antialias: true,
     resolution: window.devicePixelRatio || 1,
 });
-document.body.appendChild(app.view);
 
-setup();
-app.ticker.add((delta) => gameLoop(delta));
+// View all the available options at FontFaceObserver
+// console.log();
 
-// app.stage.addChild(sprites);
+const font = new window.FontFaceObserver('BitPotion', {});
+font.load().then(() => {
+    document.body.appendChild(app.view);
+    setup();
+    app.ticker.add((delta) => gameLoop(delta));
+});
