@@ -107,13 +107,11 @@ function spawnBg(sprite, beginRow, beginCol, spawnRate){
         let pos = stack.pop();
         let dummy = new sprite(bgContainer);
         bgContainer.addChildAtPosition(dummy.sprite, pos.row, pos.col);
-        console.log(pos.row, pos.col);
         for(let i=0;i<4;i++){
             let newrow = pos.row + dx[i];
             let newcol = pos.col + dy[i];
             if(checkSpawnable(newrow, newcol)){
                 let chance = Math.random();
-                console.log(chance);
                 if(chance > spawnRate){continue;}
                 stack.push({row: newrow, col: newcol});
             }
