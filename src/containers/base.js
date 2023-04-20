@@ -1,5 +1,6 @@
 import * as PIXI from "../../include/pixi.mjs";
 import { CONSTANT } from "../constant.js";
+import { Enemy } from "../objects/enemy.js";
 
 export class BaseContainer extends PIXI.Container {
     width = null;
@@ -61,7 +62,7 @@ export class GameContainer extends BaseContainer {
 
     nextTurn() {
         this.turn = Math.abs(this.turn - 1);
-        console.log("Turn: " + this.turn);
+        // console.log("Turn: " + this.turn);
         if (this.turn == 1) {
             return;
         } else {
@@ -70,6 +71,15 @@ export class GameContainer extends BaseContainer {
                     child.object.playTurn();
                 }
             }
+            let cnt = 0;
+            for (let row of this.grids) {
+                for (let obj of row) {
+                    if (obj instanceof Enemy) {
+                        cnt++;
+                    }
+                }
+            }
+            console.log(cnt + " enemies left.");
             this.nextTurn();
         }
     }

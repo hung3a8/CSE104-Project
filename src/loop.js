@@ -55,7 +55,7 @@ function spawnEntity(total, Entity){
     }
 }
 
-spawnEntity(20, Enemy);
+// spawnEntity(1, Enemy);
 spawnEntity(10, Tree);
 
 function spawnHouse(House){
