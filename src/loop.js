@@ -8,7 +8,7 @@ import { InfoContainer } from './containers/info.js';
 import { Sprite, Texture } from '../include/pixi.mjs';
 import { CONSTANT } from './constant.js';
 import { Grass, Dirt } from './objects/bgobj.js';
-import { ItemSprite, Helmet, Armor, Knife } from './objects/item.js';
+import { ItemSprite, Helmet, Armor, Knife, Broadsword, Roundshield, Ring} from './objects/item.js';
 
 let bgContainer = Demo.bgcontainer;
 let currentContainer = Demo.container;
@@ -149,6 +149,9 @@ function spawnItem(total, Item){
 spawnItem(2, Helmet);
 spawnItem(2, Armor);
 spawnItem(2, Knife);
+spawnItem(2, Broadsword);
+spawnItem(2, Roundshield);
+spawnItem(2, Ring);
 
 window.container = currentContainer;
 

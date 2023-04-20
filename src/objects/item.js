@@ -89,3 +89,54 @@ export class Knife extends ItemSprite {
         this.updateDescription();
     }
 }
+
+let broadswordDropRate = {0: 0.5, 1: 0.2, 2: 0.15, 3: 0.1, 4: 0.05};
+let broadswordAttack = [3, 5, 8, 12, 17];
+let broadswordRange = [0, -1, -1, -1, -1];
+let broadswordDefense = [0, -1, -2, -3, -4];
+export class Broadsword extends ItemSprite {
+    constructor(container) {
+        super(container);
+        this.container = container;
+        let x = weightedRand(broadswordDropRate);
+        this.sprite.texture = spritesheet.textures["broadsword_"+x];
+        this.attack = broadswordAttack[x];
+        this.range = broadswordRange[x];
+        this.defense = broadswordDefense[x];
+        this.description += "Broadsword " + x;
+        this.updateDescription();
+    }
+}
+
+let roundshieldDropRate = {0: 0.4, 1: 0.3, 2: 0.2, 3: 0.1};
+let roundshieldDefense = [1, 2, 3, 4];
+export class Roundshield extends ItemSprite {
+    constructor(container) {
+        super(container);
+        this.container = container;
+        let x = weightedRand(roundshieldDropRate);
+        this.sprite.texture = spritesheet.textures["roundshield_"+x];
+        this.defense = roundshieldDefense[x];
+        this.description += "Roundshield " + x;
+        this.updateDescription();
+    }
+}
+
+let ringDropRate = {0: 0.5, 1: 0.35, 2: 0.1, 3: 0.05};
+let ringMax_hp = [3, 5, 8, 10];
+let ringDefense = [1, 1, 2, 3];
+let ringAttack = [1, 1, 2, 3];
+
+export class Ring extends ItemSprite {
+    constructor(container) {
+        super(container);
+        this.container = container;
+        let x = weightedRand(ringDropRate);
+        this.sprite.texture = spritesheet.textures["ring_"+x];
+        this.max_hp = ringMax_hp[x];
+        this.defense = ringDefense[x];
+        this.attack = ringAttack[x];
+        this.description += "Ring " + x;
+        this.updateDescription();
+    }
+}

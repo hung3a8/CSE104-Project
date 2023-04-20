@@ -116,6 +116,25 @@ export const atlasData = {
         knife_3: get_frame(35, 6),
         knife_4: get_frame(36, 6),
 
+        // Item - Broadsword
+        broadsword_0: get_frame(32, 8),
+        broadsword_1: get_frame(33, 8),
+        broadsword_2: get_frame(34, 8),
+        broadsword_3: get_frame(35, 8),
+        broadsword_4: get_frame(36, 8),
+
+        // Item - Round shield
+        roundshield_0: get_frame(37, 2), 
+        roundshield_1: get_frame(38, 2),
+        roundshield_2: get_frame(39, 2),
+        roundshield_3: get_frame(40, 2),
+
+        // Item - Ring
+        ring_0: get_frame(43, 6),
+        ring_1: get_frame(44, 6),
+        ring_2: get_frame(45, 6),
+        ring_3: get_frame(46, 6),
+
         // Info bars
         "top_bar_corner_left": get_frame(19, 15),
         "top_bar": get_frame(20, 15),
