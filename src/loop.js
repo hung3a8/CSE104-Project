@@ -8,6 +8,7 @@ import { InfoContainer } from './containers/info.js';
 import { Sprite, Texture } from '../include/pixi.mjs';
 import { CONSTANT } from './constant.js';
 import { Grass, Dirt } from './objects/bgobj.js';
+import { Helmet } from './objects/item.js';
 
 let bgContainer = Demo.bgcontainer;
 let currentContainer = Demo.container;
@@ -28,16 +29,19 @@ player.setCursor(cursor);
 let ene = new Enemy(currentContainer);
 currentContainer.addChildAtPosition(ene.sprite, 2, 1);
 
-for(let i=0;i<bgContainer.rows;i++){
-    let tree = new Tree(bgContainer);
+let item = new Helmet(currentContainer);
+currentContainer.addChildAtPosition(item.sprite, 3, 1);
+
+for(let i=0;i<currentContainer.rows;i++){
+    let tree = new Tree(currentContainer);
     currentContainer.addChildAtPosition(tree.sprite, i, 0);
-    tree = new Tree(bgContainer);
+    tree = new Tree(currentContainer);
     currentContainer.addChildAtPosition(tree.sprite, i, bgContainer.cols-1);
 }
-for(let i=0;i<bgContainer.cols;i++){
-    let tree = new Tree(bgContainer);
+for(let i=0;i<currentContainer.cols;i++){
+    let tree = new Tree(currentContainer);
     currentContainer.addChildAtPosition(tree.sprite, 0, i);
-    tree = new Tree(bgContainer);
+    tree = new Tree(currentContainer);
     currentContainer.addChildAtPosition(tree.sprite, bgContainer.rows-1, i);
 }
 
@@ -142,7 +146,7 @@ export function setup() {
     app.stage.addChild(currentContainer);
     app.stage.addChild(infoContainer);
 }
-
+console.log(currentContainer.grids);
 export function gameLoop(delta) {
     currentContainer.position.x = -cursor.x + app.screen.width / 2;
     currentContainer.position.y = -cursor.y + app.screen.height / 2;

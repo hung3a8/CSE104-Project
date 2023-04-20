@@ -1,5 +1,4 @@
 import * as PIXI from '../../include/pixi.mjs';
-
 export class BaseSprite {
     level = 0;
     sprite = null;
@@ -16,7 +15,7 @@ export class BaseSprite {
     row = null;
 
     // Interactions
-    interactions = {};
+    interactions = false;
     description = "";
 
     constructor(container) {
@@ -42,7 +41,7 @@ export class BaseSprite {
     playTurn() { return; }  // Override this
 
     get interactable() {
-        return this.interactions.length > 0;
+        return this.interactions;
     }
 }
 

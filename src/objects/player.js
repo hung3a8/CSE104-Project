@@ -2,8 +2,7 @@ import * as PIXI from "../../include/pixi.mjs";
 import { CONSTANT } from '../constant.js';
 import { spritesheet } from "../sprite_loader.js";
 import { keyboard } from "../utils/keyboard.js";
-import { BaseSprite, CollisionSprite } from "./base.js";
-
+import { BaseSprite, CollisionSprite} from "./base.js";
 
 export class Player extends CollisionSprite {
     constructor(container) {

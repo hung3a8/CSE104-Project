@@ -95,6 +95,9 @@ export const atlasData = {
         grass_1: get_frame(6, 0),
         grass_2: get_frame(7, 0),
 
+        // Item - Helmet
+        helmet_0: get_frame(32, 0),
+
         // Info bars
         "top_bar_corner_left": get_frame(19, 15),
         "top_bar": get_frame(20, 15),

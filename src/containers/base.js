@@ -91,4 +91,10 @@ export class GameContainer extends BaseContainer {
         child.object.col = col;
         this.grids[row][col] = child.object;
     }
+
+    removeChildAtPosition(row, col) {
+        let child = this.getChildAtPosition(row, col);
+        super.removeChild(child.sprite);
+        this.grids[row][col] = null;
+    }
 }

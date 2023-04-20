@@ -178,4 +178,8 @@ export class Enemy extends CollisionSprite {
             this.object.y += 64;
         }
     }
+
+    getDiscirption(){
+        return {level: this.level, hp: this.hp, max_hp: this.max_hp, attack: this.attack, defense: this.defense};
+    }
 }
