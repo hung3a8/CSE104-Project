@@ -11,4 +11,3 @@ export const bgcontainer = new GameContainer({
     rows: 15,
     cols: 15,
 });
-

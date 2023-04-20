@@ -8,6 +8,9 @@ export class BaseSprite {
     max_hp = null;
     attack = null;
     defense = null;
+    range = null;
+    turn = null;  // 1 = player, 0 = enemy.
+    battleLock = false;
     container = null;
     col = null;
     row = null;
@@ -31,6 +34,12 @@ export class BaseSprite {
         this.level = Math.min(this.level + delta, this.evolutions.length - 1);
         this.sprite.texture = this.evolutions[this.level];
     }
+
+    triggerBattle() {
+        this.battleLock = true;
+    }
+
+    playTurn() { return; }  // Override this
 
     get interactable() {
         return this.interactions.length > 0;

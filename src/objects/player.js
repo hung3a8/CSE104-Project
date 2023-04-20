@@ -26,6 +26,7 @@ export class Player extends CollisionSprite {
         this.attack = 10;
         this.defense = 2;
         this.range = 2;
+        this.turn = 1;
 
         this.cursor = null;
 
@@ -35,10 +36,6 @@ export class Player extends CollisionSprite {
             kms: keyboard("k", this),
         };
 
-        // this.action.left.press = this.left_press;
-        // this.action.right.press = this.right_press;
-        // this.action.up.press = this.up_press;
-        // this.action.down.press = this.down_press;
         this.action.test_function.press = this.test_function_press;
         this.action.evolve.press = this.evolve_press;
         this.action.kms.press = this.kms_press;
@@ -57,6 +54,7 @@ export class Player extends CollisionSprite {
             let obj = this.container.grids[row][col];
             if (obj instanceof CollisionSprite && obj.interactable) {
                 obj.interact(this);
+                this.container.nextTurn();
             } else {
                 for (let pos of this.getMovablePositions()) {
                     if (pos[0] == row && pos[1] == col) {
@@ -66,12 +64,15 @@ export class Player extends CollisionSprite {
                         this.container.grids[this.row][this.col] = this;
                         this.x = this.col * CONSTANT.GRID_SIZE;
                         this.y = this.row * CONSTANT.GRID_SIZE;
-                        console.table(this.container.grids);
+                        // console.table(this.container.grids);
+                        this.container.nextTurn();
                         break;
                     }
                 }
             }
         }
+
+        console.log(this.container.turn);
     }
 
     test_function_press() {
@@ -92,6 +93,7 @@ export class Player extends CollisionSprite {
     }
 
     getMovablePositions() {
+        if (this.battleLock) return [];  // If in battle, cannot move. Good luck.
         const _res = [];
         for (let i = -1; i >= -this.range; i--) {
             if (this.can_move(this.row + i, this.col)) {
@@ -122,46 +124,6 @@ export class Player extends CollisionSprite {
         }
         return false;
     }
-
-    // left_press() {
-    //     if (this.object.x > 0 && this.object.can_move(this.object.row, this.object.col - 1)) {
-    //         this.object.x -= 64;
-    //         this.object.container.grids[this.object.row][this.object.col] = null;
-    //         this.object.col -= 1;
-    //         this.object.container.grids[this.object.row][this.object.col] = this.object;
-    //         // console.table(this.object.container.grids);
-    //     }
-    // }
-
-    // right_press() {
-    //     if (this.object.x < this.object.container.width - CONSTANT.GRID_SIZE && this.object.can_move(this.object.row, this.object.col + 1)) {
-    //         this.object.x += 64;
-    //         this.object.container.grids[this.object.row][this.object.col] = null;
-    //         this.object.col += 1;
-    //         this.object.container.grids[this.object.row][this.object.col] = this.object;
-    //         // console.table(this.object.container.grids);
-    //     }
-    // }
-
-    // up_press() {
-    //     if (this.object.y > 0 && this.object.can_move(this.object.row - 1, this.object.col)) {
-    //         this.object.y -= 64;
-    //         this.object.container.grids[this.object.row][this.object.col] = null;
-    //         this.object.row -= 1;
-    //         this.object.container.grids[this.object.row][this.object.col] = this.object;
-    //         // console.table(this.object.container.grids);
-    //     }
-    // }
-
-    // down_press() {
-    //     if (this.object.y < this.object.container.height - CONSTANT.GRID_SIZE && this.object.can_move(this.object.row + 1, this.object.col)) {
-    //         this.object.y += 64;
-    //         this.object.container.grids[this.object.row][this.object.col] = null;
-    //         this.object.row += 1;
-    //         this.object.container.grids[this.object.row][this.object.col] = this.object;
-    //         // console.table(this.object.container.grids);
-    //     }
-    // }
 }
 
 
@@ -201,17 +163,24 @@ export class PlayerCursor extends BaseSprite {
     }
 
     update() {
-        if (this.player.checkInRange(this.row, this.col)) {
+        if (this.player.checkInRange(this.row, this.col) && this.player.turn == this.container.turn) {
             if (this.container.grids[this.row][this.col] && this.container.grids[this.row][this.col].interactable) {
                 this.sprite.tint = this.tint.interactable;
+                return;
             } else if (this.container.grids[this.row][this.col] && !this.container.grids[this.row][this.col].interactable) {
                 this.sprite.tint = this.tint.not_interactable;
+                return
             } else {
-                this.sprite.tint = this.tint.interactable;  // Movable actually
+                for (let pos of this.player.getMovablePositions()) {
+                    if (pos[0] == this.row && pos[1] == this.col) {
+                        this.sprite.tint = this.tint.interactable;
+                        return;
+                    }
+                }
             }
-        } else {
-            this.sprite.tint = this.tint.normal;
         }
+
+        this.sprite.tint = this.tint.normal;
     }
 
     getDescription() {
@@ -261,6 +230,8 @@ export class PlayerCursor extends BaseSprite {
     }
 
     interact_press() {
-        this.object.player.interact(this.object.row, this.object.col);
+        if (this.object.player.turn == this.object.container.turn) {
+            this.object.player.interact(this.object.row, this.object.col);
+        }
     }
 }

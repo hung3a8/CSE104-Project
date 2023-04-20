@@ -20,7 +20,7 @@ let infoContainer = new InfoContainer({
     player: player,
 });
 
-currentContainer.addChildAtPosition(player.sprite, 1, 1);
+currentContainer.setPlayer(player, 1, 1);
 const cursor = new PlayerCursor(currentContainer, player);
 currentContainer.addChild(cursor.sprite);
 player.setCursor(cursor);
@@ -54,7 +54,7 @@ function spawnEntity(total, Entity){
     }
 }
 
-spawnEntity(10, Enemy);
+spawnEntity(20, Enemy);
 spawnEntity(10, Tree);
 
 function spawnHouse(House){

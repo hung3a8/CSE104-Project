@@ -39,6 +39,7 @@ export class BaseContainer extends PIXI.Container {
 export class GameContainer extends BaseContainer {
     rows = null;
     cols = null;
+    turn = 1;  // 1 for player, 0 for enemy
     static GRID_SIZE = CONSTANT.GRID_SIZE;
 
     constructor({
@@ -56,6 +57,26 @@ export class GameContainer extends BaseContainer {
         for (let child of this.children) {
             if (child.object.update) child.object.update();
         }
+    }
+
+    nextTurn() {
+        this.turn = Math.abs(this.turn - 1);
+        console.log("Turn: " + this.turn);
+        if (this.turn == 1) {
+            return;
+        } else {
+            for (let child of this.children) {
+                if (child.object.turn == this.turn) {
+                    child.object.playTurn();
+                }
+            }
+            this.nextTurn();
+        }
+    }
+
+    setPlayer(player, row, col) {
+        this.player = player;
+        this.addChildAtPosition(player.sprite, row, col);
     }
 
     getChildAtPosition(row, col) {
