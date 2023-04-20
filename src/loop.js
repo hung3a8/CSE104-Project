@@ -8,7 +8,7 @@ import { InfoContainer } from './containers/info.js';
 import { Sprite, Texture } from '../include/pixi.mjs';
 import { CONSTANT } from './constant.js';
 import { Grass, Dirt } from './objects/bgobj.js';
-import { Helmet } from './objects/item.js';
+import { ItemSprite, Helmet, Armor, Knife } from './objects/item.js';
 
 let bgContainer = Demo.bgcontainer;
 let currentContainer = Demo.container;
@@ -28,9 +28,6 @@ player.setCursor(cursor);
 
 let ene = new Enemy(currentContainer);
 currentContainer.addChildAtPosition(ene.sprite, 2, 1);
-
-let item = new Helmet(currentContainer);
-currentContainer.addChildAtPosition(item.sprite, 3, 1);
 
 for(let i=0;i<currentContainer.rows;i++){
     let tree = new Tree(currentContainer);
@@ -92,7 +89,7 @@ function checkSpawnable(row, col){
     if(row < 0 || row >= bgContainer.rows || col < 0 || col >= bgContainer.cols){return false;}
     if(bgContainer.grids[row][col] !== null){return false;}
     let spi = currentContainer.grids[row][col];
-    if(spi === null || spi instanceof Enemy || spi instanceof Player){return true;}
+    if(spi === null || spi instanceof Enemy || spi instanceof Player || spi instanceof ItemSprite){return true;}
     return false;
 }
 
@@ -138,6 +135,20 @@ for(let i=0;i<2;i++){
         }
     }
 }
+
+function spawnItem(total, Item){
+    for(let _=0;_<total;_++){   // try to spawn "total" Item
+        let item = new Item(currentContainer);
+        let randomrow = getRandomInt(currentContainer.rows);
+        let randomcol = getRandomInt(currentContainer.cols);
+        if(currentContainer.grids[randomrow][randomcol] === null){
+            currentContainer.addChildAtPosition(item.sprite, randomrow, randomcol);
+        }
+    }
+}
+spawnItem(2, Helmet);
+spawnItem(2, Armor);
+spawnItem(2, Knife);
 
 window.container = currentContainer;
 

@@ -97,6 +97,24 @@ export const atlasData = {
 
         // Item - Helmet
         helmet_0: get_frame(32, 0),
+        helmet_1: get_frame(33, 0),
+        helmet_2: get_frame(34, 0),
+        helmet_3: get_frame(35, 0),
+        helmet_4: get_frame(36, 0),
+
+        // Item - Armor
+        armor_0: get_frame(32, 1),
+        armor_1: get_frame(33, 1),
+        armor_2: get_frame(34, 1),
+        armor_3: get_frame(35, 1),
+        armor_4: get_frame(36, 1),
+
+        // Item - Knife
+        knife_0: get_frame(32, 6),
+        knife_1: get_frame(33, 6),
+        knife_2: get_frame(34, 6),
+        knife_3: get_frame(35, 6),
+        knife_4: get_frame(36, 6),
 
         // Info bars
         "top_bar_corner_left": get_frame(19, 15),
