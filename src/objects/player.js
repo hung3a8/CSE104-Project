@@ -70,8 +70,6 @@ export class Player extends CollisionSprite {
                 }
             }
         }
-
-        console.log(this.container.turn);
     }
 
     test_function_press() {

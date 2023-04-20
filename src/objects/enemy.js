@@ -38,6 +38,7 @@ export class Enemy extends CollisionSprite {
         this.max_hp = 10;
         this.attack = 5;
         this.defense = 1;
+        this.range = 1;
         this.turn = 0;
     }
 
@@ -59,10 +60,13 @@ export class Enemy extends CollisionSprite {
                 return true;
             }
         }
+
+        return false;
     }
 
     playTurn() {
         let check = this.checkForBattle();
+        console.log(check);
         if (!check) {
             this.move();
             this.checkForBattle();
@@ -72,6 +76,30 @@ export class Enemy extends CollisionSprite {
     move() {
         // console.log(this);
         const path = this.minDistance();
+        console.log("From", this.row, this.col, "to", this.container.player.row, this.container.player.col);
+        console.table(path);
+        // console.table(this.container.grids);
+        let max_range = this.range;
+        // Ignore the last element in the path, which is the player and the first element, which is the enemy itself
+        for (let i = 1; i < path.length - 1 && max_range > 0; i++) {
+            let to_row = path[i][0];
+            let to_col = path[i][1];
+            if (this.can_move(to_row, to_col)) {
+                console.log("Moving to " + to_row + " " + to_col);
+                this.container.grids[this.row][this.col] = null;
+                this.row = to_row;
+                this.col = to_col;
+                this.sprite.x = this.col * CONSTANT.GRID_SIZE;
+                this.sprite.y = this.row * CONSTANT.GRID_SIZE;
+                this.container.grids[this.row][this.col] = this;
+                max_range--;
+                // console.log(max_range, "left");
+            } else {
+                console.log("Cannot move to " + to_row + " " + to_col + " because it is occupied by " + this.container.grids[to_row][to_col]);
+                console.log(this.can_move(to_col, to_row));
+            }
+        }
+        console.table(this.container.grids);
     }
 
     minDistance() {
@@ -89,7 +117,7 @@ export class Enemy extends CollisionSprite {
         const move_col = [0, -1, 1, 0];
 
         while (q.length > 0) {
-            let cell = q.pop();
+            let cell = q.shift();
 
             let i = cell.row;
             let j = cell.col;
@@ -115,6 +143,8 @@ export class Enemy extends CollisionSprite {
         if (!found) {
             return -1;
         }
+
+        // console.table(cost);
 
         // trace back the path
         let min = 100000;
