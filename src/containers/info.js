@@ -104,6 +104,24 @@ class RangeInfo extends TextInfo {
 }
 
 
+class InBattleInfo extends TextInfo {
+    constructor({x, y, width, height, player}) {
+        super({x, y, width, height, player});
+        this.text = new PIXI.Text(``, {
+            fontFamily: 'BitPotion',
+            fontSize: 48,
+            fill: 0x38d973,
+            align: 'center',
+        });
+        this.addChild(this.text);
+    }
+
+    update() {
+        this.text.text = `Battle: ${this.player.inBattle() ? 1 : 0}`;
+    }
+}
+
+
 export class DescriptionContainer extends TextInfo {
     description = "";
     constructor({x, y, width, height, player}) {
@@ -132,6 +150,7 @@ export class InfoContainer extends BaseContainer {
         this.attack_info = new AttackInfo({x: 272, y: 48, width: 200, height: 50, player: this.player});
         this.defense_info = new DefenseInfo({x: 272, y: 80, width: 200, height: 50, player: this.player});
         this.range_info = new RangeInfo({x: 400, y: 48, width: 200, height: 50, player: this.player});
+        this.in_battle_info = new InBattleInfo({x: 400, y: 80, width: 200, height: 50, player: this.player});
         this.description = new DescriptionContainer({x: 544, y: 48, width: 200, height: 50, player: this.player});
 
         this.background = new PIXI.Sprite(spritesheet.textures["info_background"]);
@@ -147,6 +166,7 @@ export class InfoContainer extends BaseContainer {
         this.addChild(this.defense_info);
         this.addChild(this.range_info);
         this.addChild(this.description);
+        this.addChild(this.in_battle_info);
 
         // Border
         const top_bar_corner_left = new PIXI.Sprite(spritesheet.textures["top_bar_corner_left"]);

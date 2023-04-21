@@ -56,7 +56,9 @@ export class GameContainer extends BaseContainer {
     update() {
         // console.log(this.children);
         for (let child of this.children) {
-            if (child.object.update) child.object.update();
+            if (child.object.update) {
+                child.object.update();
+            }
         }
     }
 
@@ -71,15 +73,6 @@ export class GameContainer extends BaseContainer {
                     child.object.playTurn();
                 }
             }
-            let cnt = 0;
-            for (let row of this.grids) {
-                for (let obj of row) {
-                    if (obj instanceof Enemy) {
-                        cnt++;
-                    }
-                }
-            }
-            console.log(cnt + " enemies left.");
             this.nextTurn();
         }
     }

@@ -3,6 +3,7 @@ import { CONSTANT } from '../constant.js';
 import { spritesheet } from "../sprite_loader.js";
 import { keyboard } from "../utils/keyboard.js";
 import { BaseSprite, CollisionSprite} from "./base.js";
+import { arrayEquals } from "../utils/arrays.js";
 
 export class Player extends CollisionSprite {
     constructor(container) {
@@ -26,6 +27,8 @@ export class Player extends CollisionSprite {
         this.defense = 2;
         this.range = 2;
         this.turn = 1;
+
+        this.battles = [];
 
         this.cursor = null;
 
@@ -51,7 +54,7 @@ export class Player extends CollisionSprite {
     interact(row, col) {
         if (this.checkInRange(row, col)) {
             let obj = this.container.grids[row][col];
-            if (obj instanceof CollisionSprite && obj.interactable) {
+            if (obj && obj.interactable) {
                 obj.interact(this);
                 this.container.nextTurn();
             } else {
@@ -66,6 +69,12 @@ export class Player extends CollisionSprite {
                         // console.table(this.container.grids);
                         this.container.nextTurn();
                         break;
+                    }
+                }
+
+                for (let enemy of this.battles) {
+                    if (!enemy.checkInRange(this.row, this.col)) {
+                        enemy.outOfBattle();
                     }
                 }
             }
@@ -89,8 +98,21 @@ export class Player extends CollisionSprite {
         return null, null;
     }
 
+    getEnemyRange() {
+        let _res = [];
+        const hasKnown = new Map();
+        for (let enemy of this.battles) {
+            for (let pos of enemy.getRange()) {
+                if (!hasKnown[JSON.stringify(pos)]) {
+                    hasKnown.set(JSON.stringify(pos), true);
+                    _res.push(pos);
+                }
+            }
+        }
+        return _res;
+    }
+
     getMovablePositions() {
-        if (this.battleLock) return [];  // If in battle, cannot move. Good luck.
         const _res = [];
         for (let i = -1; i >= -this.range; i--) {
             if (this.can_move(this.row + i, this.col)) {
@@ -112,7 +134,37 @@ export class Player extends CollisionSprite {
                 _res.push([this.row, this.col + i]);
             } else break;
         }
+
+        if (this.battles.length > 0) {
+            for (let pos of _res) {
+                let failed = true;
+                for (let enemy of this.battles) {
+                    if (enemy.checkInRange(pos[0], pos[1])) {
+                        failed = false;
+                    }
+                }
+                if (failed) {
+                    _res.splice(_res.indexOf(pos), 1);
+                }
+            }
+        }
+
         return _res;
+    }
+
+    addBattle(enemy) {
+        this.battles.push(enemy);
+    }
+
+    inBattle() {
+        return this.battles.length > 0;
+    }
+
+    update() {
+        super.update();
+        this.border.clear();
+        this.border.lineStyle(4, 0x00ff00, 0.3);
+        this.border.drawRect(-this.range * CONSTANT.GRID_SIZE, -this.range * CONSTANT.GRID_SIZE, CONSTANT.GRID_SIZE * (this.range * 2 + 1), CONSTANT.GRID_SIZE * (this.range * 2 + 1));
     }
 
     checkInRange(row, col) {
@@ -160,6 +212,7 @@ export class PlayerCursor extends BaseSprite {
     }
 
     update() {
+        super.update();
         if (this.player.checkInRange(this.row, this.col) && this.player.turn == this.container.turn) {
             if (this.container.grids[this.row][this.col] && this.container.grids[this.row][this.col].interactable) {
                 this.sprite.tint = this.tint.interactable;

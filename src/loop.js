@@ -55,7 +55,7 @@ function spawnEntity(total, Entity){
     }
 }
 
-// spawnEntity(1, Enemy);
+spawnEntity(5, Enemy);
 spawnEntity(10, Tree);
 
 function spawnHouse(House){
@@ -160,7 +160,6 @@ export function setup() {
     app.stage.addChild(currentContainer);
     app.stage.addChild(infoContainer);
 }
-console.log(currentContainer.grids);
 export function gameLoop(delta) {
     currentContainer.position.x = -cursor.x + app.screen.width / 2;
     currentContainer.position.y = -cursor.y + app.screen.height / 2;

@@ -1,4 +1,5 @@
 import * as PIXI from '../../include/pixi.mjs';
+import { CONSTANT } from '../constant.js';
 export class BaseSprite {
     level = 0;
     sprite = null;
@@ -21,7 +22,9 @@ export class BaseSprite {
     constructor(container) {
         this.container = container;
         this.sprite = new PIXI.Sprite();
-        this.sprite.object = this;  // Two way reference
+        this.sprite.object = this;
+        this.border = new PIXI.Graphics();
+        this.sprite.addChild(this.border);
     }
 
     get x() { return this.sprite.x; }
@@ -34,15 +37,30 @@ export class BaseSprite {
         this.sprite.texture = this.evolutions[this.level];
     }
 
-    triggerBattle() {
-        this.battleLock = true;
+    inflictDamage(damage) {
+        this.hp = Math.max(this.hp - damage, 0);
+        if (this.hp == 0) {
+            this.die();
+        }
+    }
+
+    die() {
+        this.container.removeChild(this.sprite);
+        this.container.grids[this.row][this.col] = null;
+    }
+
+
+    attackObject(obj) {
+        obj.inflictDamage(this.attack);
     }
 
     playTurn() { return; }  // Override this
 
     get interactable() {
-        return this.interactions;
+        return 'interact' in this;
     }
+
+    update() {}
 }
 
 export class CollisionSprite extends BaseSprite {

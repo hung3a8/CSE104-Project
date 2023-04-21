@@ -29,7 +29,7 @@ export class Enemy extends CollisionSprite {
         super(container);
         this.container = container;
         this.level = 0;
-        this.description = "This is an enemy. Scary!";
+        this.description = "This is an enemy.";
 
         let x = getRandomInt(16);
         this.sprite.texture = spritesheet.textures["enemy_" + x];
@@ -42,12 +42,41 @@ export class Enemy extends CollisionSprite {
         this.turn = 0;
     }
 
+    get info() {
+        return;
+    }
+
+    die() {
+        this.outOfBattle();
+        console.log("enemy die");
+        super.die();
+    }
+
+    update() {
+        console.log('update');
+        this.description = `Enemy. [${this.hp}/${this.max_hp}] [${this.attack}] [${this.defense}] [${this.range}]`;
+    }
+
+    triggerBattle() {
+        this.battleLock = true;
+        this.container.player.battleLock = true;
+        this.container.player.addBattle(this);
+    }
+
+    outOfBattle() {
+        this.battleLock = false;
+        this.container.player.battles = this.container.player.battles.filter((e) => e != this);
+        if (this.container.player.battles.length == 0) {
+            this.container.player.battleLock = false;
+        }
+        console.log("out of battle");
+    }
+
     checkForBattle() {
         // Detect if player is in the column next to the enemy
         if (this.container.player.col == this.col) {
             if (this.container.player.row == this.row - 1 || this.container.player.row == this.row + 1) {
                 this.triggerBattle();
-                console.log("Time to dududududududuel!")
                 return true;
             }
         }
@@ -56,7 +85,6 @@ export class Enemy extends CollisionSprite {
         if (this.container.player.row == this.row) {
             if (this.container.player.col == this.col - 1 || this.container.player.col == this.col + 1) {
                 this.triggerBattle();
-                console.log("Time to dududududududuel!")
                 return true;
             }
         }
@@ -64,19 +92,33 @@ export class Enemy extends CollisionSprite {
         return false;
     }
 
+    checkInRange(row, col) {
+        if (Math.abs(this.row - row) <= this.range && Math.abs(this.col - col) <= this.range) {
+            return true;
+        }
+        return false;
+    }
+
+    interact(player) {
+        console.log("Enemy interact");
+        this.inflictDamage(player.attack);
+    }
+
     playTurn() {
         let check = this.checkForBattle();
-        console.log(check);
         if (!check) {
             this.move();
-            this.checkForBattle();
+            if (this.checkForBattle()) {
+                this.attackObject(this.container.player);
+            }
+        } else {
+            this.attackObject(this.container.player);
         }
     }
 
     move() {
         // console.log(this);
         const path = this.minDistance();
-        console.log("From", this.row, this.col, "to", this.container.player.row, this.container.player.col);
         console.table(path);
         // console.table(this.container.grids);
         let max_range = this.range;
@@ -85,7 +127,6 @@ export class Enemy extends CollisionSprite {
             let to_row = path[i][0];
             let to_col = path[i][1];
             if (this.can_move(to_row, to_col)) {
-                console.log("Moving to " + to_row + " " + to_col);
                 this.container.grids[this.row][this.col] = null;
                 this.row = to_row;
                 this.col = to_col;
@@ -94,9 +135,6 @@ export class Enemy extends CollisionSprite {
                 this.container.grids[this.row][this.col] = this;
                 max_range--;
                 // console.log(max_range, "left");
-            } else {
-                console.log("Cannot move to " + to_row + " " + to_col + " because it is occupied by " + this.container.grids[to_row][to_col]);
-                console.log(this.can_move(to_col, to_row));
             }
         }
         console.table(this.container.grids);
@@ -183,6 +221,13 @@ export class Enemy extends CollisionSprite {
         }
 
         return path.reverse();
+    }
+
+    update() {
+        super.update();
+        this.border.clear();
+        this.border.lineStyle(4, 0xff0000, 0.3);
+        this.border.drawRect(-this.range * CONSTANT.GRID_SIZE, -this.range * CONSTANT.GRID_SIZE, CONSTANT.GRID_SIZE * (this.range * 2 + 1), CONSTANT.GRID_SIZE * (this.range * 2 + 1));
     }
 
     left_move() {
