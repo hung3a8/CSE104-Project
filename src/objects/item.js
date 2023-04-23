@@ -31,11 +31,12 @@ export class ItemSprite extends CollisionSprite{
         this.container.removeChildAtPosition(this.row, this.col);
     }
     updateDescription() {
-        if(this.max_hp !== 0){this.description += " ["+(this.max_hp > 0 ? "+" : "")+this.max_hp+" max HP]";}
-        if(this.hp !== 0){this.description += " ["+(this.hp > 0 ? "+" : "")+this.hp+" HP]";}
-        if(this.defense !== 0){this.description += " ["+(this.defense > 0 ? "+" : "")+this.defense+" DEF]";}
-        if(this.attack !== 0){this.description += " ["+(this.attack > 0 ? "+" : "")+this.attack+" ATK]";}
-        if(this.range !== 0){this.description += " ["+(this.range > 0 ? "+" : "")+this.range+" RANGE]";}
+        this.description += "\n";
+        if(this.max_hp !== 0){this.description += "["+(this.max_hp > 0 ? "+" : "")+this.max_hp+" max HP]";}
+        if(this.hp !== 0){this.description += "["+(this.hp > 0 ? "+" : "")+this.hp+" HP]";}
+        if(this.defense !== 0){this.description += "["+(this.defense > 0 ? "+" : "")+this.defense+" DEF]";}
+        if(this.attack !== 0){this.description += "["+(this.attack > 0 ? "+" : "")+this.attack+" ATK]";}
+        if(this.range !== 0){this.description += "["+(this.range > 0 ? "+" : "")+this.range+" RANGE]";}
     }
 }
 
@@ -43,16 +44,20 @@ let helmetDropRate = {0: 0.4, 1: 0.3, 2: 0.15, 3: 0.1, 4: 0.05};
 let helmetMax_hp = [3, 5, 7, 10, 15];
 let helmetDefense = [0, 1, 1, 2, 3];
 export class Helmet extends ItemSprite {
-
     constructor(container) {
         super(container);
         this.container = container;
         let x = weightedRand(helmetDropRate);
         this.sprite.texture = spritesheet.textures["helmet_"+x];
+        this.string = "helmet_"+x;
         this.max_hp = helmetMax_hp[x];
         this.defense = helmetDefense[x];
         this.description += "Helmet " + x;
         this.updateDescription();
+    }
+    interact(player) {
+        super.interact(player);
+        player.helmet = this.string;
     }
 }
 
@@ -66,11 +71,16 @@ export class Armor extends ItemSprite {
         this.container = container;
         let x = weightedRand(armorDropRate);
         this.sprite.texture = spritesheet.textures["armor_"+x];
+        this.string = "armor_"+x;
         this.max_hp = armorMax_hp[x];
         this.defense = armorDefense[x];
         this.range = armorRange[x];
         this.description += "Armor " + x;
         this.updateDescription();
+    }
+    interact(player) {
+        super.interact(player);
+        player.armor = this.string;
     }
 }
 
@@ -83,10 +93,15 @@ export class Knife extends ItemSprite {
         this.container = container;
         let x = weightedRand(knifeDropRate);
         this.sprite.texture = spritesheet.textures["knife_"+x];
+        this.string = "knife_"+x;
         this.attack = knifeAttack[x];
         this.range = knifeRange[x];
         this.description += "Knife " + x;
         this.updateDescription();
+    }
+    interact(player) {
+        super.interact(player);
+        player.weapon = this.string;
     }
 }
 
@@ -100,11 +115,16 @@ export class Broadsword extends ItemSprite {
         this.container = container;
         let x = weightedRand(broadswordDropRate);
         this.sprite.texture = spritesheet.textures["broadsword_"+x];
+        this.string = "broadsword_"+x;
         this.attack = broadswordAttack[x];
         this.range = broadswordRange[x];
         this.defense = broadswordDefense[x];
         this.description += "Broadsword " + x;
         this.updateDescription();
+    }
+    interact(player) {
+        super.interact(player);
+        player.weapon = this.string;
     }
 }
 
@@ -116,9 +136,14 @@ export class Roundshield extends ItemSprite {
         this.container = container;
         let x = weightedRand(roundshieldDropRate);
         this.sprite.texture = spritesheet.textures["roundshield_"+x];
+        this.string = "roundshield_"+x;
         this.defense = roundshieldDefense[x];
         this.description += "Roundshield " + x;
         this.updateDescription();
+    }
+    interact(player) {
+        super.interact(player);
+        player.shield = this.string;
     }
 }
 
@@ -133,10 +158,15 @@ export class Ring extends ItemSprite {
         this.container = container;
         let x = weightedRand(ringDropRate);
         this.sprite.texture = spritesheet.textures["ring_"+x];
+        this.string = "ring_"+x;
         this.max_hp = ringMax_hp[x];
         this.defense = ringDefense[x];
         this.attack = ringAttack[x];
         this.description += "Ring " + x;
         this.updateDescription();
+    }
+    interact(player) {
+        super.interact(player);
+        player.accessory = this.string;
     }
 }

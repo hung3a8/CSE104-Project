@@ -69,7 +69,7 @@ export class Enemy extends CollisionSprite {
         if (this.container.player.battles.length == 0) {
             this.container.player.battleLock = false;
         }
-        console.log("out of battle");
+        //console.log("out of battle");
     }
 
     checkForBattle() {
@@ -105,7 +105,7 @@ export class Enemy extends CollisionSprite {
     }
 
     interact(player) {
-        console.log("Enemy interact");
+        //console.log("Enemy interact");
         this.inflictDamage(player.attack);
     }
 
@@ -124,7 +124,7 @@ export class Enemy extends CollisionSprite {
     move() {
         // console.log(this);
         const path = this.minDistance();
-        console.table(path);
+        //console.table(path);
         // console.table(this.container.grids);
         let max_range = this.range;
         // Ignore the last element in the path, which is the player and the first element, which is the enemy itself
@@ -142,7 +142,7 @@ export class Enemy extends CollisionSprite {
                 // console.log(max_range, "left");
             }
         }
-        console.table(this.container.grids);
+        //console.table(this.container.grids);
     }
 
     minDistance() {

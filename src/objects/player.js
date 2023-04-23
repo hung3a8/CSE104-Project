@@ -28,6 +28,14 @@ export class Player extends CollisionSprite {
         this.range = 2;
         this.turn = 1;
 
+        // Initial items
+        this.helmet = "";
+        this.armor = "";
+        this.weapon = "";
+        this.shield = "";
+        this.accessory = "";
+        this.boot = "";
+
         this.battles = [];
 
         this.cursor = null;

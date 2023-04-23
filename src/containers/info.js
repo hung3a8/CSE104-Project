@@ -141,17 +141,97 @@ export class DescriptionContainer extends TextInfo {
     }
 }
 
+class ItemContainer extends BaseContainer {
+    constructor({x, y, width, height, player}) {
+        super({x, y, width, height});
+        this.player = player;
+        this.sprite = new PIXI.Sprite(spritesheet.textures[""]);
+        let g = new PIXI.Graphics();
+        g.beginFill(0x00000);
+        // set the line style to have a width of 5 and set the color to red
+        g.lineStyle(4, 0xFF0000);
+        // draw a rectangle
+        g.drawRect(this.x, this.y, 64, 64);
+        this.addChild(g);
+        this.addChild(this.sprite);
+    }
+}
+
+class HelmetContainer extends ItemContainer {
+    constructor({x, y, width, height, player}) {
+        super({x, y, width, height, player});
+    }
+    update() {
+        this.removeChild(this.sprite);
+        this.sprite = new PIXI.Sprite(spritesheet.textures[this.player.helmet]);
+        this.addChild(this.sprite);      
+    }
+}
+
+class ArmorContainer extends ItemContainer {
+    constructor({x, y, width, height, player}) {
+        super({x, y, width, height, player});
+    }
+    update() {
+        this.removeChild(this.sprite);
+        this.sprite = new PIXI.Sprite(spritesheet.textures[this.player.armor]);
+        this.addChild(this.sprite);
+    }
+}
+
+class WeaponContainer extends ItemContainer {
+    constructor({x, y, width, height, player}) {
+        super({x, y, width, height, player});
+    }
+    update() {
+        this.removeChild(this.sprite);
+        this.sprite = new PIXI.Sprite(spritesheet.textures[this.player.weapon]);
+        this.addChild(this.sprite);
+    }
+}
+
+class ShieldContainer extends ItemContainer {
+    constructor({x, y, width, height, player}) {
+        super({x, y, width, height, player});
+    }
+    update() {
+        this.removeChild(this.sprite);
+        this.sprite = new PIXI.Sprite(spritesheet.textures[this.player.shield]);
+        this.addChild(this.sprite);
+    }
+}
+
+class BootsContainer extends ItemContainer {
+    constructor({x, y, width, height, player}) {
+        super({x, y, width, height, player});
+    }
+    update() {
+        this.removeChild(this.sprite);
+        this.sprite = new PIXI.Sprite(spritesheet.textures[this.player.boots]);
+        this.addChild(this.sprite);
+    }
+}
+class AccessoryContainer extends ItemContainer {
+    constructor({x, y, width, height, player}) {
+        super({x, y, width, height, player});
+    }
+    update() {
+        this.removeChild(this.sprite);
+        this.sprite = new PIXI.Sprite(spritesheet.textures[this.player.accessory]);
+        this.addChild(this.sprite);
+    }
+}
 export class InfoContainer extends BaseContainer {
     constructor({x, y, width, height, player}) {
         super({x, y, width, height});
         this.player = player;
         this.hit_point_info = new HitPointInfo({x: 48, y: 48, width: 200, height: 50, player: this.player});
         this.level_info = new LevelInfo({x: 48, y: 80, width: 200, height: 50, player: this.player});
-        this.attack_info = new AttackInfo({x: 272, y: 48, width: 200, height: 50, player: this.player});
-        this.defense_info = new DefenseInfo({x: 272, y: 80, width: 200, height: 50, player: this.player});
-        this.range_info = new RangeInfo({x: 400, y: 48, width: 200, height: 50, player: this.player});
-        this.in_battle_info = new InBattleInfo({x: 400, y: 80, width: 200, height: 50, player: this.player});
-        this.description = new DescriptionContainer({x: 544, y: 48, width: 200, height: 50, player: this.player});
+        this.attack_info = new AttackInfo({x: 242, y: 48, width: 200, height: 50, player: this.player});
+        this.defense_info = new DefenseInfo({x: 242, y: 80, width: 200, height: 50, player: this.player});
+        this.range_info = new RangeInfo({x: 380, y: 48, width: 200, height: 50, player: this.player});
+        this.in_battle_info = new InBattleInfo({x: 380, y: 80, width: 200, height: 50, player: this.player});
+        this.description = new DescriptionContainer({x: 1000, y: 48, width: 200, height: 50, player: this.player});
 
         this.background = new PIXI.Sprite(spritesheet.textures["info_background"]);
 
@@ -167,6 +247,18 @@ export class InfoContainer extends BaseContainer {
         this.addChild(this.range_info);
         this.addChild(this.description);
         this.addChild(this.in_battle_info);
+    
+        this.helmet = new HelmetContainer({x: 576, y: 48, width: 64, height: 64, player: this.player});
+        this.armor = new ArmorContainer({x: 656, y: 48, width: 64, height: 64, player: this.player});
+        this.weapon = new WeaponContainer({x: 736, y: 48, width: 64, height: 64, player: this.player});
+        this.shield = new ShieldContainer({x: 816, y: 48, width: 64, height: 64, player: this.player});
+        this.accessory = new AccessoryContainer({x: 896, y: 48, width: 64, height: 64, player: this.player});
+
+        this.addChild(this.helmet);
+        this.addChild(this.armor);
+        this.addChild(this.weapon);
+        this.addChild(this.shield);
+        this.addChild(this.accessory);
 
         // Border
         const top_bar_corner_left = new PIXI.Sprite(spritesheet.textures["top_bar_corner_left"]);
