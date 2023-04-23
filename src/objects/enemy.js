@@ -74,19 +74,24 @@ export class Enemy extends CollisionSprite {
 
     checkForBattle() {
         // Detect if player is in the column next to the enemy
-        if (this.container.player.col == this.col) {
-            if (this.container.player.row == this.row - 1 || this.container.player.row == this.row + 1) {
-                this.triggerBattle();
-                return true;
-            }
-        }
+        // if (this.container.player.col == this.col) {
+        //     if (this.container.player.row == this.row - 1 || this.container.player.row == this.row + 1) {
+        //         this.triggerBattle();
+        //         return true;
+        //     }
+        // }
 
         // Detect if player is in the row next to the enemy
-        if (this.container.player.row == this.row) {
-            if (this.container.player.col == this.col - 1 || this.container.player.col == this.col + 1) {
-                this.triggerBattle();
-                return true;
-            }
+        // if (this.container.player.row == this.row) {
+        //     if (this.container.player.col == this.col - 1 || this.container.player.col == this.col + 1) {
+        //         this.triggerBattle();
+        //         return true;
+        //     }
+        // }
+
+        if (this.checkInRange(this.container.player.row, this.container.player.col)) {
+            this.triggerBattle();
+            return true;
         }
 
         return false;
