@@ -64,10 +64,6 @@ export class BaseSprite {
 }
 
 export class CollisionSprite extends BaseSprite {
-    constructor(container) {
-        super(container);
-    }
-
     can_move(to_row, to_col) {
         // Get the object at position (x, y) in container
         if (to_row < 0 || to_row >= this.container.rows || to_col < 0 || to_col >= this.container.cols) {

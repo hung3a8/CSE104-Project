@@ -54,7 +54,6 @@ export class GameContainer extends BaseContainer {
     }
 
     update() {
-        // console.log(this.children);
         for (let child of this.children) {
             if (child.object.update) {
                 child.object.update();
@@ -64,7 +63,6 @@ export class GameContainer extends BaseContainer {
 
     nextTurn() {
         this.turn = Math.abs(this.turn - 1);
-        // console.log("Turn: " + this.turn);
         if (this.turn == 1) {
             return;
         } else {

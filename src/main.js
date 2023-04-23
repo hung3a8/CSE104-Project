@@ -13,9 +13,6 @@ export const app = new PIXI.Application({
     resolution: window.devicePixelRatio || 1,
 });
 
-// View all the available options at FontFaceObserver
-// console.log();
-
 const font = new window.FontFaceObserver('BitPotion', {});
 font.load().then(() => {
     document.body.appendChild(app.view);

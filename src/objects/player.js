@@ -90,9 +90,10 @@ export class Player extends CollisionSprite {
     }
 
     test_function_press() {
-        this.object.getMovablePositions();
-        console.log(this.object.cursor);
-        console.log(this.object.getCursorPosition());
+        this.object.getMovablePositions(true);
+        for (let enemy of this.object.battles) {
+            console.log(enemy.checkInRange(1, 4));
+        }
     }
 
     setCursor(cursor) {
@@ -120,7 +121,7 @@ export class Player extends CollisionSprite {
         return _res;
     }
 
-    getMovablePositions() {
+    getMovablePositions(log=false) {
         const _res = [];
         for (let i = -1; i >= -this.range; i--) {
             if (this.can_move(this.row + i, this.col)) {
@@ -143,21 +144,52 @@ export class Player extends CollisionSprite {
             } else break;
         }
 
+        const hold = [];
+
         if (this.battles.length > 0) {
             for (let pos of _res) {
+                // if (log) console.log("check", pos);
                 let failed = true;
                 for (let enemy of this.battles) {
                     if (enemy.checkInRange(pos[0], pos[1])) {
                         failed = false;
+                        break;
                     }
                 }
                 if (failed) {
-                    _res.splice(_res.indexOf(pos), 1);
+                    // if (log) console.log("remove", pos);
+                    hold.push(pos);
+                } else {
+                    // if (log) console.log("keep", pos);
                 }
             }
         }
 
-        return _res;
+        const actual_res = [];
+
+        for (let pos of _res) {
+            let failed = false;
+            for (let tmp of hold) {
+                if (pos[0] == tmp[0] && pos[1] == tmp[1]) {
+                    failed = true;
+                    break;
+                }
+            }
+            if (!failed) {
+                actual_res.push(pos);
+            }
+        }
+
+        return actual_res;
+    }
+
+    isMovable(row, col) {
+        for (let pos of this.getMovablePositions()) {
+            if (pos[0] == row && pos[1] == col) {
+                return true;
+            }
+        }
+        return false;
     }
 
     addBattle(enemy) {
@@ -227,14 +259,10 @@ export class PlayerCursor extends BaseSprite {
                 return;
             } else if (this.container.grids[this.row][this.col] && !this.container.grids[this.row][this.col].interactable) {
                 this.sprite.tint = this.tint.not_interactable;
-                return
-            } else {
-                for (let pos of this.player.getMovablePositions()) {
-                    if (pos[0] == this.row && pos[1] == this.col) {
-                        this.sprite.tint = this.tint.interactable;
-                        return;
-                    }
-                }
+                return;
+            } else if (this.player.isMovable(this.row, this.col)) {
+                this.sprite.tint = this.tint.interactable;
+                return;
             }
         }
 

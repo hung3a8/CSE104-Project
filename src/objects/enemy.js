@@ -27,7 +27,6 @@ let enemyStat = [
 export class Enemy extends CollisionSprite {
     constructor(container) {
         super(container);
-        this.container = container;
         this.level = 0;
         this.description = "This is an enemy.";
 
@@ -48,12 +47,10 @@ export class Enemy extends CollisionSprite {
 
     die() {
         this.outOfBattle();
-        console.log("enemy die");
         super.die();
     }
 
     update() {
-        console.log('update');
         this.description = `Enemy. [${this.hp}/${this.max_hp}] [${this.attack}] [${this.defense}] [${this.range}]`;
     }
 
@@ -69,26 +66,9 @@ export class Enemy extends CollisionSprite {
         if (this.container.player.battles.length == 0) {
             this.container.player.battleLock = false;
         }
-        //console.log("out of battle");
     }
 
     checkForBattle() {
-        // Detect if player is in the column next to the enemy
-        // if (this.container.player.col == this.col) {
-        //     if (this.container.player.row == this.row - 1 || this.container.player.row == this.row + 1) {
-        //         this.triggerBattle();
-        //         return true;
-        //     }
-        // }
-
-        // Detect if player is in the row next to the enemy
-        // if (this.container.player.row == this.row) {
-        //     if (this.container.player.col == this.col - 1 || this.container.player.col == this.col + 1) {
-        //         this.triggerBattle();
-        //         return true;
-        //     }
-        // }
-
         if (this.checkInRange(this.container.player.row, this.container.player.col)) {
             this.triggerBattle();
             return true;
@@ -105,7 +85,6 @@ export class Enemy extends CollisionSprite {
     }
 
     interact(player) {
-        //console.log("Enemy interact");
         this.inflictDamage(player.attack);
     }
 
@@ -122,10 +101,7 @@ export class Enemy extends CollisionSprite {
     }
 
     move() {
-        // console.log(this);
         const path = this.minDistance();
-        //console.table(path);
-        // console.table(this.container.grids);
         let max_range = this.range;
         // Ignore the last element in the path, which is the player and the first element, which is the enemy itself
         for (let i = 1; i < path.length - 1 && max_range > 0; i++) {
@@ -139,10 +115,8 @@ export class Enemy extends CollisionSprite {
                 this.sprite.y = this.row * CONSTANT.GRID_SIZE;
                 this.container.grids[this.row][this.col] = this;
                 max_range--;
-                // console.log(max_range, "left");
             }
         }
-        //console.table(this.container.grids);
     }
 
     minDistance() {
@@ -187,8 +161,6 @@ export class Enemy extends CollisionSprite {
             return -1;
         }
 
-        // console.table(cost);
-
         // trace back the path
         let min = 100000;
         let min_row = -1;
@@ -219,7 +191,6 @@ export class Enemy extends CollisionSprite {
                     min = cost[x][y];
                     min_row = x;
                     min_col = y;
-                    // console.log(x, y);
                 }
             }
             path.push([min_row, min_col]);
