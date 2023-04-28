@@ -146,12 +146,12 @@ function spawnItem(total, Item){
         }
     }
 }
-spawnItem(2, Helmet);
-spawnItem(2, Armor);
-spawnItem(2, Knife);
-spawnItem(2, Broadsword);
-spawnItem(2, Roundshield);
-spawnItem(2, Ring);
+spawnItem(3, Helmet);
+spawnItem(3, Armor);
+spawnItem(3, Knife);
+spawnItem(3, Broadsword);
+spawnItem(3, Roundshield);
+spawnItem(3, Ring);
 
 window.container = currentContainer;
 

@@ -146,15 +146,36 @@ class ItemContainer extends BaseContainer {
         super({x, y, width, height});
         this.player = player;
         this.sprite = new PIXI.Sprite(spritesheet.textures[""]);
+
         let g = new PIXI.Graphics();
         g.beginFill(0x00000);
         // set the line style to have a width of 5 and set the color to red
         g.lineStyle(4, 0xFF0000);
         // draw a rectangle
         g.drawRect(this.x, this.y, 64, 64);
+        // make the container interactive...
+        g.interactive = true;
+        g.cursor = 'pointer';
+        //g.on('pointerover', DisplayInfo);
+        //g.on('pointerout', StopDisplayInfo);
+
         this.addChild(g);
         this.addChild(this.sprite);
     }
+}
+
+function DisplayInfo(){
+    console.log("display info");
+    let info = new PIXI.Graphics();
+    info.beginFill(0x00000);
+    info.lineStyle(4, 0xFF0000);
+    info.drawRect(0, 0, 200, 200);
+    this.addChild(info);
+}
+
+function StopDisplayInfo(){
+    console.log("stop display info");
+    this.removeChild(this.children[0]);
 }
 
 class HelmetContainer extends ItemContainer {

@@ -23,6 +23,7 @@ export class ItemSprite extends CollisionSprite{
         this.range = 0;
     }
     interact(player) {
+        // add stat of the new weapon
         player.defense += this.defense;
         player.max_hp += this.max_hp;
         player.hp += this.max_hp;
@@ -56,6 +57,7 @@ export class Helmet extends ItemSprite {
         this.updateDescription();
     }
     interact(player) {
+        removeHelmet(player);
         super.interact(player);
         player.helmet = this.string;
     }
@@ -79,6 +81,7 @@ export class Armor extends ItemSprite {
         this.updateDescription();
     }
     interact(player) {
+        removeArmor(player);
         super.interact(player);
         player.armor = this.string;
     }
@@ -100,6 +103,7 @@ export class Knife extends ItemSprite {
         this.updateDescription();
     }
     interact(player) {
+        removeWeapon(player);
         super.interact(player);
         player.weapon = this.string;
     }
@@ -123,6 +127,7 @@ export class Broadsword extends ItemSprite {
         this.updateDescription();
     }
     interact(player) {
+        removeWeapon(player);
         super.interact(player);
         player.weapon = this.string;
     }
@@ -143,6 +148,10 @@ export class Roundshield extends ItemSprite {
     }
     interact(player) {
         super.interact(player);
+        if(player.shield !== ""){
+            let old_shield = player.shield.split("_")[1];
+            player.defense -= roundshieldDefense[old_shield];
+        }
         player.shield = this.string;
     }
 }
@@ -166,7 +175,66 @@ export class Ring extends ItemSprite {
         this.updateDescription();
     }
     interact(player) {
+        removeAccessory(player);
         super.interact(player);
         player.accessory = this.string;
     }
+}
+
+function removeAllItem(player){
+    removeWeapon(player);
+    removeHelmet(player);
+    removeArmor(player);
+    removeShield(player);
+    removeAccessory(player);
+}
+
+function removeWeapon(player){
+    if(player.weapon === ""){return;}
+    console.log(player.weapon);
+    let s = player.weapon.split("_");
+    let id = parseInt(s[1], 10)
+    if(s[0] === 'knife'){
+        player.attack -= knifeAttack[id];
+        player.range -= knifeRange[id];
+    }else if(s[0] === 'broadsword'){
+        player.attack -= broadswordAttack[id];
+        player.range -= broadswordRange[id];
+    }
+}
+
+function removeHelmet(player){
+    if(player.helmet === ""){return;}
+    let s = player.helmet.split("_");
+    let id = parseInt(s[1], 10)
+    player.max_hp -= helmetMax_hp[id];
+    player.hp -= helmetMax_hp[id];
+    player.defense -= helmetDefense[id];
+}
+
+function removeArmor(player){
+    if(player.armor === ""){return;}
+    let s = player.armor.split("_");
+    let id = parseInt(s[1], 10)
+    player.max_hp -= armorMax_hp[id];
+    player.hp -= armorMax_hp[id];
+    player.defense -= armorDefense[id];
+    player.range -= armorRange[id];
+}
+
+function removeShield(player){
+    if(player.shield === ""){return;}
+    let s = player.shield.split("_");
+    let id = parseInt(s[1], 10)
+    player.defense -= roundshieldDefense[id];
+}
+
+function removeAccessory(player){
+    if(player.accessory === ""){return;}
+    let s = player.accessory.split("_");
+    let id = parseInt(s[1], 10)
+    player.max_hp -= ringMax_hp[id];
+    player.hp -= ringMax_hp[id];
+    player.defense -= ringDefense[id];
+    player.attack -= ringAttack[id];
 }
