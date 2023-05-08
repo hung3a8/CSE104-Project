@@ -43,6 +43,28 @@ function spawnEntity(total, Entity){
     }
 }
 
+function spawnEnemy(total, level){
+    for(let _=0;_<total;_++){   // try to spawn "total" enemy
+        let enemy = new Enemy(gameContainer, level);
+        let randomrow = getRandomInt(gameContainer.rows);
+        let randomcol = getRandomInt(gameContainer.cols);
+        if(gameContainer.grids[randomrow][randomcol] === null){
+            gameContainer.addChildAtPosition(enemy.sprite, randomrow, randomcol);
+        }
+    }
+}
+
+function spawnTree(total){
+    for(let _=0;_<total;_++){   // try to spawn "total" tree
+        let tree = new Tree(gameContainer);
+        let randomrow = getRandomInt(gameContainer.rows);
+        let randomcol = getRandomInt(gameContainer.cols);
+        if(gameContainer.grids[randomrow][randomcol] === null){
+            gameContainer.addChildAtPosition(tree.sprite, randomrow, randomcol);
+        }
+    }
+}
+
 function spawnHouse(House){
     for(let _=0;_<10;_++){  // try to spawn orange house
         let randomrow = getRandomInt(gameContainer.rows - 1);
@@ -156,12 +178,13 @@ function clearGrid(){
         }
     }
 }
-let firstLevel = true;
+let stageLevel = 0;
 export function gameLoop(delta) {
     if(currentContainer instanceof GameContainer){
         if(countEnemy() === 0){
             clearGrid();
-            if(firstLevel){firstLevel = false;}else{player.evolve();}
+            stageLevel++;
+            if(stageLevel !== 1){player.evolve();}
             for(let i=0;i<currentContainer.rows;i++){
                 let tree = new Tree(currentContainer);
                 currentContainer.addChildAtPosition(tree.sprite, i, 0);
@@ -174,8 +197,8 @@ export function gameLoop(delta) {
                 tree = new Tree(currentContainer);
                 currentContainer.addChildAtPosition(tree.sprite, bgContainer.rows-1, i);
             }
-            spawnEntity(Math.floor(currentContainer.rows * currentContainer.cols / 5), Tree);
-            spawnEntity(5, Enemy);
+            spawnTree(Math.floor(currentContainer.rows * currentContainer.cols / 5));
+            spawnEnemy(5, stageLevel);
             spawnItem(3, Helmet);
             spawnItem(3, Armor);
             spawnItem(3, Knife);

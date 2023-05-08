@@ -5,42 +5,23 @@ import { CollisionSprite } from "./base.js";
 
 function getRandomInt(max) {return Math.floor(Math.random() * max);}
 
-let enemyStat = [
-                    {name: 'Wiliam', hp: 100, atk: 10, def: 3},
-                    {name: 'cd', hp: 100, atk: 10, def: 3},
-                    {name: 'ef', hp: 100, atk: 10, def: 3},
-                    {name: 'gh', hp: 100, atk: 10, def: 3},
-                    {name: 'ij', hp: 100, atk: 10, def: 3},
-                    {name: 'kl', hp: 100, atk: 10, def: 3},
-                    {name: 'mn', hp: 100, atk: 10, def: 3},
-                    {name: 'op', hp: 100, atk: 10, def: 3},
-                    {name: 'qr', hp: 100, atk: 10, def: 3},
-                    {name: 'st', hp: 100, atk: 10, def: 3},
-                    {name: 'uv', hp: 100, atk: 10, def: 3},
-                    {name: 'wx', hp: 100, atk: 10, def: 3},
-                    {name: 'yz', hp: 100, atk: 10, def: 3},
-                    {name: 'ac', hp: 100, atk: 10, def: 3},
-                    {name: 'ad', hp: 100, atk: 10, def: 3},
-                    {name: 'af', hp: 100, atk: 10, def: 3},
-                ];
-
 export class Enemy extends CollisionSprite {
     MAX_PLAYER_FIND = 10;
-    constructor(container) {
+    constructor(container, level) {
         super(container);
-        this.level = 0;
+        this.level = level;
         this.description = "This is an enemy.";
 
         let x = getRandomInt(16);
         this.sprite.texture = spritesheet.textures["enemy_" + x];
 
-        this.hp = 10;
-        this.max_hp = 10;
-        this.attack = 5;
-        this.defense = 1;
-        this.range = 1;
+        this.max_hp = 10 + getRandomInt(this.level) * 3;
+        this.hp = this.max_hp;
+        this.attack = 5 + getRandomInt(this.level);
+        this.defense = 1 + Math.floor(getRandomInt(this.level) / 3);
+        this.range = 1 + Math.floor(getRandomInt(this.level) / 4);
         this.turn = 0;
-
+        console.log(this.level, this.max_hp, this.attack, this.defense, this.range);
         this.xp = getRandomInt(10) + 1;
     }
 
