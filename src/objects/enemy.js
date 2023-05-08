@@ -32,6 +32,8 @@ export class Enemy extends CollisionSprite {
     die() {
         this.outOfBattle();
         this.container.player.add_xp(this.xp);
+        this.container.player.hp += Math.floor(this.max_hp / 4);
+        this.container.player.hp = Math.min(this.container.player.hp, this.container.player.max_hp);
         super.die();
     }
 
