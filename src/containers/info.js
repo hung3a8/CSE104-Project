@@ -142,8 +142,9 @@ export class DescriptionContainer extends TextInfo {
 }
 
 class ItemContainer extends BaseContainer {
-    constructor({x, y, width, height, player}) {
+    constructor({x, y, width, height, player, itemContainer}) {
         super({x, y, width, height});
+        this.itemContainer = itemContainer;
         this.player = player;
         this.sprite = new PIXI.Sprite(spritesheet.textures[""]);
 
@@ -156,26 +157,8 @@ class ItemContainer extends BaseContainer {
         // make the container interactive...
         g.interactive = true;
         g.cursor = 'pointer';
-        //g.on('pointerover', DisplayInfo);
-        //g.on('pointerout', StopDisplayInfo);
-
         this.addChild(g);
-        this.addChild(this.sprite);
     }
-}
-
-function DisplayInfo(){
-    console.log("display info");
-    let info = new PIXI.Graphics();
-    info.beginFill(0x00000);
-    info.lineStyle(4, 0xFF0000);
-    info.drawRect(0, 0, 200, 200);
-    this.addChild(info);
-}
-
-function StopDisplayInfo(){
-    console.log("stop display info");
-    this.removeChild(this.children[0]);
 }
 
 class HelmetContainer extends ItemContainer {
