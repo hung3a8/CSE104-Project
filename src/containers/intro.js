@@ -38,6 +38,8 @@ export class IntroContainer extends BaseContainer {
                 this.toGameFunction();
             }
         );
+        startText.interactive = true;
+        startText.cursor = 'pointer';
         this.addChild(startText);
 
         // Create game name above the start button named "WeirdRPG"

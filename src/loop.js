@@ -109,13 +109,20 @@ function spawnItem(total, Item){
         }
     }
 }
-window.container = currentContainer;
+window.container = gameContainer;
 
 export function setup() {
+    app.stage.addChild(currentContainer);
+}
+
+export function toGame() {
+    app.stage.removeChild(currentContainer)
+    currentContainer = gameContainer;
     app.stage.addChild(bgContainer);
     app.stage.addChild(currentContainer);
     app.stage.addChild(infoContainer);
 }
+introContainer.setToGame(toGame);
 
 function countEnemy(){
     let count = 0;
@@ -151,56 +158,60 @@ function clearGrid(){
 }
 let firstLevel = true;
 export function gameLoop(delta) {
-    if(countEnemy() === 0){
-        clearGrid();
-        if(firstLevel){firstLevel = false;}else{player.evolve();}
-        for(let i=0;i<currentContainer.rows;i++){
-            let tree = new Tree(currentContainer);
-            currentContainer.addChildAtPosition(tree.sprite, i, 0);
-            tree = new Tree(currentContainer);
-            currentContainer.addChildAtPosition(tree.sprite, i, bgContainer.cols-1);
-        }
-        for(let i=0;i<currentContainer.cols;i++){
-            let tree = new Tree(currentContainer);
-            currentContainer.addChildAtPosition(tree.sprite, 0, i);
-            tree = new Tree(currentContainer);
-            currentContainer.addChildAtPosition(tree.sprite, bgContainer.rows-1, i);
-        }
-        spawnEntity(Math.floor(currentContainer.rows * currentContainer.cols / 5), Tree);
-        spawnEntity(5, Enemy);
-        spawnItem(3, Helmet);
-        spawnItem(3, Armor);
-        spawnItem(3, Knife);
-        spawnItem(3, Broadsword);
-        spawnItem(3, Roundshield);
-        spawnItem(3, Ring);
-        spawnHouse(OrangeHouse);
-        spawnHouse(WoodenHouse);
-        for(let i=0;i<8;i++){
-            while(true){
-                let randomrow = getRandomInt(bgContainer.rows);
-                let randomcol = getRandomInt(bgContainer.cols);
-                if(checkSpawnable(randomrow, randomcol)){
-                    spawnBg(Grass, randomrow, randomcol);
-                    break;
+    if(currentContainer instanceof GameContainer){
+        if(countEnemy() === 0){
+            clearGrid();
+            if(firstLevel){firstLevel = false;}else{player.evolve();}
+            for(let i=0;i<currentContainer.rows;i++){
+                let tree = new Tree(currentContainer);
+                currentContainer.addChildAtPosition(tree.sprite, i, 0);
+                tree = new Tree(currentContainer);
+                currentContainer.addChildAtPosition(tree.sprite, i, bgContainer.cols-1);
+            }
+            for(let i=0;i<currentContainer.cols;i++){
+                let tree = new Tree(currentContainer);
+                currentContainer.addChildAtPosition(tree.sprite, 0, i);
+                tree = new Tree(currentContainer);
+                currentContainer.addChildAtPosition(tree.sprite, bgContainer.rows-1, i);
+            }
+            spawnEntity(Math.floor(currentContainer.rows * currentContainer.cols / 5), Tree);
+            spawnEntity(5, Enemy);
+            spawnItem(3, Helmet);
+            spawnItem(3, Armor);
+            spawnItem(3, Knife);
+            spawnItem(3, Broadsword);
+            spawnItem(3, Roundshield);
+            spawnItem(3, Ring);
+            spawnHouse(OrangeHouse);
+            spawnHouse(WoodenHouse);
+            for(let i=0;i<8;i++){
+                while(true){
+                    let randomrow = getRandomInt(bgContainer.rows);
+                    let randomcol = getRandomInt(bgContainer.cols);
+                    if(checkSpawnable(randomrow, randomcol)){
+                        spawnBg(Grass, randomrow, randomcol);
+                        break;
+                    }
+                }
+                while(true){
+                    let randomrow = getRandomInt(bgContainer.rows);
+                    let randomcol = getRandomInt(bgContainer.cols);
+                    if(checkSpawnable(randomrow, randomcol)){
+                        spawnBg(Dirt, randomrow, randomcol);
+                        break;
+                    }
                 }
             }
-            while(true){
-                let randomrow = getRandomInt(bgContainer.rows);
-                let randomcol = getRandomInt(bgContainer.cols);
-                if(checkSpawnable(randomrow, randomcol)){
-                    spawnBg(Dirt, randomrow, randomcol);
-                    break;
-                }
-            }
         }
+        currentContainer.position.x = -cursor.x + app.screen.width / 2;
+        currentContainer.position.y = -cursor.y + app.screen.height / 2;
+
+        currentContainer.update();
+        infoContainer.update();
+
+        bgContainer.position.x = currentContainer.position.x;
+        bgContainer.position.y = currentContainer.position.y;
+    }else{
+        currentContainer.update();
     }
-    currentContainer.position.x = -cursor.x + app.screen.width / 2;
-    currentContainer.position.y = -cursor.y + app.screen.height / 2;
-
-    currentContainer.update();
-    infoContainer.update();
-
-    bgContainer.position.x = currentContainer.position.x;
-    bgContainer.position.y = currentContainer.position.y;
 }
