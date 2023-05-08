@@ -82,6 +82,7 @@ export class Player extends CollisionSprite {
             if(this.level === this.xp_cap.length) {return;}
             this.evolve();
             this.max_hp += new_stats.hp;
+            this.hp += new_stats.hp;
             this.attack += new_stats.attack;
             this.defense += new_stats.defense;
             this.range += new_stats.range;
