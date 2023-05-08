@@ -38,7 +38,7 @@ export class BaseSprite {
     }
 
     inflictDamage(damage) {
-        this.hp = Math.max(this.hp - damage, 0);
+        this.hp = Math.max(this.hp - Math.max(damage - this.defense, 0), 0);
         if (this.hp == 0) {
             this.die();
         }

@@ -131,7 +131,7 @@ export class DescriptionContainer extends TextInfo {
             fontSize: 48,
             fill: 0xff0000,
             wordWrap: true,
-            wordWrapWidth: 1000,
+            wordWrapWidth: 550,
         });
         this.addChild(this.text);
     }
@@ -168,7 +168,7 @@ class HelmetContainer extends ItemContainer {
     update() {
         this.removeChild(this.sprite);
         this.sprite = new PIXI.Sprite(spritesheet.textures[this.player.helmet]);
-        this.addChild(this.sprite);      
+        this.addChild(this.sprite);
     }
 }
 
@@ -251,7 +251,7 @@ export class InfoContainer extends BaseContainer {
         this.addChild(this.range_info);
         this.addChild(this.description);
         this.addChild(this.in_battle_info);
-    
+
         this.helmet = new HelmetContainer({x: 576, y: 48, width: 64, height: 64, player: this.player});
         this.armor = new ArmorContainer({x: 656, y: 48, width: 64, height: 64, player: this.player});
         this.weapon = new WeaponContainer({x: 736, y: 48, width: 64, height: 64, player: this.player});

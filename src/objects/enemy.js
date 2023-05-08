@@ -25,6 +25,7 @@ let enemyStat = [
                 ];
 
 export class Enemy extends CollisionSprite {
+    MAX_PLAYER_FIND = 10;
     constructor(container) {
         super(container);
         this.level = 0;
@@ -39,6 +40,8 @@ export class Enemy extends CollisionSprite {
         this.defense = 1;
         this.range = 1;
         this.turn = 0;
+
+        this.xp = getRandomInt(10) + 1;
     }
 
     get info() {
@@ -47,11 +50,8 @@ export class Enemy extends CollisionSprite {
 
     die() {
         this.outOfBattle();
+        this.container.player.add_xp(this.xp);
         super.die();
-    }
-
-    update() {
-        this.description = `Enemy. [${this.hp}/${this.max_hp}] [${this.attack}] [${this.defense}] [${this.range}]`;
     }
 
     triggerBattle() {
@@ -102,6 +102,10 @@ export class Enemy extends CollisionSprite {
 
     move() {
         const path = this.minDistance();
+        if (path.length > this.MAX_PLAYER_FIND) {
+            return;
+        }
+
         let max_range = this.range;
         // Ignore the last element in the path, which is the player and the first element, which is the enemy itself
         for (let i = 1; i < path.length - 1 && max_range > 0; i++) {
@@ -201,9 +205,12 @@ export class Enemy extends CollisionSprite {
 
     update() {
         super.update();
-        this.border.clear();
-        this.border.lineStyle(4, 0xff0000, 0.3);
-        this.border.drawRect(-this.range * CONSTANT.GRID_SIZE, -this.range * CONSTANT.GRID_SIZE, CONSTANT.GRID_SIZE * (this.range * 2 + 1), CONSTANT.GRID_SIZE * (this.range * 2 + 1));
+        this.description = `This is an enemy. [HP: ${this.hp}/${this.max_hp}] [ATK: ${this.attack}] [DEF: ${this.defense}] [RANGE: ${this.range}]`;
+        if (this.battleLock) {
+            this.border.clear();
+            this.border.lineStyle(4, 0xff0000, 0.3);
+            this.border.drawRect(-this.range * CONSTANT.GRID_SIZE, -this.range * CONSTANT.GRID_SIZE, CONSTANT.GRID_SIZE * (this.range * 2 + 1), CONSTANT.GRID_SIZE * (this.range * 2 + 1));
+        }
     }
 
     left_move() {
