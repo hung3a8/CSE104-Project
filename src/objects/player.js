@@ -36,13 +36,12 @@ export class Player extends CollisionSprite {
             350,
         ]
 
-        this.level_stats = [
-            {hp: 100, attack: 2, defense: 1, range: 1},
-            {hp: 105, attack: 3, defense: 1, range: 1},
-            {hp: 107, attack: 3, defense: 2, range: 1},
-            {hp: 111, attack: 5, defense: 3, range: 1},
-            {hp: 113, attack: 6, defense: 5, range: 1},
-            {hp: 115, attack: 7, defense: 6, range: 1},
+        this.statsGain = [
+            {hp: 10, attack: 1, defense: 0, range: 0},
+            {hp: 15, attack: 1, defense: 0, range: 0},
+            {hp: 17, attack: 1, defense: 1, range: 1},
+            {hp: 20, attack: 2, defense: 0, range: 0},
+            {hp: 25, attack: 2, defense: 0, range: 1},
         ]
 
         this.xp = 0;
@@ -77,12 +76,16 @@ export class Player extends CollisionSprite {
     add_xp(xp) {
         this.xp += xp;
         if (this.xp >= this.xp_cap[this.level]) {
+            console.log("Level up!");
+            console.log('old stats', this.max_hp, this.attack, this.defense, this.range);
+            const new_stats = this.statsGain[this.level];
+            if(this.level === this.xp_cap.length) {return;}
             this.evolve();
-            const new_stats = this.level_stats[this.level];
-            this.max_hp = new_stats.hp;
-            this.attack = new_stats.attack;
-            this.defense = new_stats.defense;
-            this.range = new_stats.range;
+            this.max_hp += new_stats.hp;
+            this.attack += new_stats.attack;
+            this.defense += new_stats.defense;
+            this.range += new_stats.range;
+            console.log('new stats', this.max_hp, this.attack, this.defense, this.range);
         }
     }
 

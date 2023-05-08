@@ -6,6 +6,7 @@ import { OrangeHouse, WoodenHouse } from './objects/house.js';
 import * as Demo from './containers/demo.js';
 import { InfoContainer } from './containers/info.js';
 import { IntroContainer } from './containers/intro.js';
+import { EndContainer } from './containers/end.js';
 import { Sprite, Texture } from '../include/pixi.mjs';
 import { CONSTANT } from './constant.js';
 import { Grass, Dirt } from './objects/bgobj.js';
@@ -15,6 +16,8 @@ import { GameContainer } from './containers/base.js';
 let gameContainer = Demo.container;
 let bgContainer = Demo.bgcontainer;
 let introContainer = new IntroContainer({ x: 0, y: 0, width: CONSTANT.CANVAS_WIDTH, height: CONSTANT.CANVAS_HEIGHT, gameContainer: gameContainer });
+let endContainer = new EndContainer({ x: 0, y: 0, width: CONSTANT.CANVAS_WIDTH, height: CONSTANT.CANVAS_HEIGHT, gameContainer: gameContainer });
+
 let currentContainer = introContainer;
 const player = new Player(gameContainer);
 let infoContainer = new InfoContainer({
@@ -145,6 +148,7 @@ export function toGame() {
     app.stage.addChild(infoContainer);
 }
 introContainer.setToGame(toGame);
+endContainer.setToGame(toGame);
 
 function countEnemy(){
     let count = 0;
@@ -178,63 +182,69 @@ function clearGrid(){
         }
     }
 }
+
 let stageLevel = 0;
 export function gameLoop(delta) {
     if(currentContainer instanceof GameContainer){
-        if(countEnemy() === 0){
-            clearGrid();
-            stageLevel++;
-            if(stageLevel !== 1){player.evolve();}
-            for(let i=0;i<currentContainer.rows;i++){
-                let tree = new Tree(currentContainer);
-                currentContainer.addChildAtPosition(tree.sprite, i, 0);
-                tree = new Tree(currentContainer);
-                currentContainer.addChildAtPosition(tree.sprite, i, bgContainer.cols-1);
-            }
-            for(let i=0;i<currentContainer.cols;i++){
-                let tree = new Tree(currentContainer);
-                currentContainer.addChildAtPosition(tree.sprite, 0, i);
-                tree = new Tree(currentContainer);
-                currentContainer.addChildAtPosition(tree.sprite, bgContainer.rows-1, i);
-            }
-            spawnTree(Math.floor(currentContainer.rows * currentContainer.cols / 5));
-            spawnEnemy(5, stageLevel);
-            spawnItem(3, Helmet);
-            spawnItem(3, Armor);
-            spawnItem(3, Knife);
-            spawnItem(3, Broadsword);
-            spawnItem(3, Roundshield);
-            spawnItem(3, Ring);
-            spawnHouse(OrangeHouse);
-            spawnHouse(WoodenHouse);
-            for(let i=0;i<8;i++){
-                while(true){
-                    let randomrow = getRandomInt(bgContainer.rows);
-                    let randomcol = getRandomInt(bgContainer.cols);
-                    if(checkSpawnable(randomrow, randomcol)){
-                        spawnBg(Grass, randomrow, randomcol);
-                        break;
+        if(player.hp <= 0){
+            app.stage.removeChild(currentContainer);
+            app.stage.removeChild(bgContainer);
+            app.stage.removeChild(infoContainer);
+            currentContainer = endContainer;
+            app.stage.addChild(currentContainer);
+        }else{
+            if(countEnemy() === 0){
+                clearGrid();
+                stageLevel++;
+                for(let i=0;i<currentContainer.rows;i++){
+                    let tree = new Tree(currentContainer);
+                    currentContainer.addChildAtPosition(tree.sprite, i, 0);
+                    tree = new Tree(currentContainer);
+                    currentContainer.addChildAtPosition(tree.sprite, i, bgContainer.cols-1);
+                }
+                for(let i=0;i<currentContainer.cols;i++){
+                    let tree = new Tree(currentContainer);
+                    currentContainer.addChildAtPosition(tree.sprite, 0, i);
+                    tree = new Tree(currentContainer);
+                    currentContainer.addChildAtPosition(tree.sprite, bgContainer.rows-1, i);
+                }
+                spawnTree(Math.floor(currentContainer.rows * currentContainer.cols / 5));
+                spawnEnemy(5, stageLevel);
+                spawnItem(3, Helmet);
+                spawnItem(3, Armor);
+                spawnItem(3, Knife);
+                spawnItem(3, Broadsword);
+                spawnItem(3, Roundshield);
+                spawnItem(3, Ring);
+                spawnHouse(OrangeHouse);
+                spawnHouse(WoodenHouse);
+                for(let i=0;i<8;i++){
+                    while(true){
+                        let randomrow = getRandomInt(bgContainer.rows);
+                        let randomcol = getRandomInt(bgContainer.cols);
+                        if(checkSpawnable(randomrow, randomcol)){
+                            spawnBg(Grass, randomrow, randomcol);
+                            break;
+                        }
+                    }
+                    while(true){
+                        let randomrow = getRandomInt(bgContainer.rows);
+                        let randomcol = getRandomInt(bgContainer.cols);
+                        if(checkSpawnable(randomrow, randomcol)){
+                            spawnBg(Dirt, randomrow, randomcol);
+                            break;
+                        }
                     }
                 }
-                while(true){
-                    let randomrow = getRandomInt(bgContainer.rows);
-                    let randomcol = getRandomInt(bgContainer.cols);
-                    if(checkSpawnable(randomrow, randomcol)){
-                        spawnBg(Dirt, randomrow, randomcol);
-                        break;
-                    }
-                }
             }
+            currentContainer.position.x = -cursor.x + app.screen.width / 2;
+            currentContainer.position.y = -cursor.y + app.screen.height / 2;
+
+            currentContainer.update();
+            infoContainer.update();
+
+            bgContainer.position.x = currentContainer.position.x;
+            bgContainer.position.y = currentContainer.position.y;
         }
-        currentContainer.position.x = -cursor.x + app.screen.width / 2;
-        currentContainer.position.y = -cursor.y + app.screen.height / 2;
-
-        currentContainer.update();
-        infoContainer.update();
-
-        bgContainer.position.x = currentContainer.position.x;
-        bgContainer.position.y = currentContainer.position.y;
-    }else{
-        currentContainer.update();
-    }
+    }else{currentContainer.update();}
 }

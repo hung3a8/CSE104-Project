@@ -21,8 +21,8 @@ export class Enemy extends CollisionSprite {
         this.defense = 1 + Math.floor(getRandomInt(this.level) / 3);
         this.range = 1 + Math.floor(getRandomInt(this.level) / 4);
         this.turn = 0;
-        console.log(this.level, this.max_hp, this.attack, this.defense, this.range);
-        this.xp = getRandomInt(10) + 1;
+        this.xp = getRandomInt(10) + getRandomInt(this.level) * 2;
+        console.log(this.level, this.max_hp, this.attack, this.defense, this.range, this.xp);
     }
 
     get info() {

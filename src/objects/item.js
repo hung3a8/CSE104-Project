@@ -191,7 +191,6 @@ function removeAllItem(player){
 
 function removeWeapon(player){
     if(player.weapon === ""){return;}
-    console.log(player.weapon);
     let s = player.weapon.split("_");
     let id = parseInt(s[1], 10)
     if(s[0] === 'knife'){
