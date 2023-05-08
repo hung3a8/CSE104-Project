@@ -5,14 +5,18 @@ import { Tree } from './objects/tree.js';
 import { OrangeHouse, WoodenHouse } from './objects/house.js';
 import * as Demo from './containers/demo.js';
 import { InfoContainer } from './containers/info.js';
+import { IntroContainer } from './containers/intro.js';
 import { Sprite, Texture } from '../include/pixi.mjs';
 import { CONSTANT } from './constant.js';
 import { Grass, Dirt } from './objects/bgobj.js';
 import { ItemSprite, Helmet, Armor, Knife, Broadsword, Roundshield, Ring} from './objects/item.js';
+import { GameContainer } from './containers/base.js';
 
+let gameContainer = Demo.container;
 let bgContainer = Demo.bgcontainer;
-let currentContainer = Demo.container;
-const player = new Player(currentContainer);
+let introContainer = new IntroContainer({ x: 0, y: 0, width: CONSTANT.CANVAS_WIDTH, height: CONSTANT.CANVAS_HEIGHT, gameContainer: gameContainer });
+let currentContainer = introContainer;
+const player = new Player(gameContainer);
 let infoContainer = new InfoContainer({
     x: 0,
     y: CONSTANT.GAME_HEIGHT,
@@ -21,36 +25,36 @@ let infoContainer = new InfoContainer({
     player: player,
 });
 
-currentContainer.setPlayer(player, 1, 1);
-const cursor = new PlayerCursor(currentContainer, player);
-currentContainer.addChild(cursor.sprite);
+gameContainer.setPlayer(player, 1, 1);
+const cursor = new PlayerCursor(gameContainer, player);
+gameContainer.addChild(cursor.sprite);
 player.setCursor(cursor);
 
-let ene = new Enemy(currentContainer);
-currentContainer.addChildAtPosition(ene.sprite, 2, 1);
+let ene = new Enemy(gameContainer);
+gameContainer.addChildAtPosition(ene.sprite, 2, 1);
 
-for(let i=0;i<currentContainer.rows;i++){
-    let tree = new Tree(currentContainer);
-    currentContainer.addChildAtPosition(tree.sprite, i, 0);
-    tree = new Tree(currentContainer);
-    currentContainer.addChildAtPosition(tree.sprite, i, bgContainer.cols-1);
+for(let i=0;i<gameContainer.rows;i++){
+    let tree = new Tree(gameContainer);
+    gameContainer.addChildAtPosition(tree.sprite, i, 0);
+    tree = new Tree(gameContainer);
+    gameContainer.addChildAtPosition(tree.sprite, i, bgContainer.cols-1);
 }
-for(let i=0;i<currentContainer.cols;i++){
-    let tree = new Tree(currentContainer);
-    currentContainer.addChildAtPosition(tree.sprite, 0, i);
-    tree = new Tree(currentContainer);
-    currentContainer.addChildAtPosition(tree.sprite, bgContainer.rows-1, i);
+for(let i=0;i<gameContainer.cols;i++){
+    let tree = new Tree(gameContainer);
+    gameContainer.addChildAtPosition(tree.sprite, 0, i);
+    tree = new Tree(gameContainer);
+    gameContainer.addChildAtPosition(tree.sprite, bgContainer.rows-1, i);
 }
 
 function getRandomInt(max) {return Math.floor(Math.random() * max);}
 
 function spawnEntity(total, Entity){
     for(let _=0;_<total;_++){   // try to spawn "total" Entity
-        let entity = new Entity(currentContainer);
-        let randomrow = getRandomInt(currentContainer.rows);
-        let randomcol = getRandomInt(currentContainer.cols);
-        if(currentContainer.grids[randomrow][randomcol] === null){
-            currentContainer.addChildAtPosition(entity.sprite, randomrow, randomcol);
+        let entity = new Entity(gameContainer);
+        let randomrow = getRandomInt(gameContainer.rows);
+        let randomcol = getRandomInt(gameContainer.cols);
+        if(gameContainer.grids[randomrow][randomcol] === null){
+            gameContainer.addChildAtPosition(entity.sprite, randomrow, randomcol);
         }
     }
 }
@@ -60,12 +64,12 @@ spawnEntity(10, Tree);
 
 function spawnHouse(House){
     for(let _=0;_<10;_++){  // try to spawn orange house
-        let randomrow = getRandomInt(currentContainer.rows - 1);
-        let randomcol = getRandomInt(currentContainer.cols - 2);
+        let randomrow = getRandomInt(gameContainer.rows - 1);
+        let randomcol = getRandomInt(gameContainer.cols - 2);
         let block = false;
         for(let i=0;i<2;i++){
             for(let j=0;j<3;j++){
-                if(currentContainer.grids[randomrow+i][randomcol+j] !== null){
+                if(gameContainer.grids[randomrow+i][randomcol+j] !== null){
                     block = true;
                 }
             }
@@ -73,8 +77,8 @@ function spawnHouse(House){
         if(!block){
             for(let i=0;i<2;i++){
                 for(let j=0;j<3;j++){
-                    let dummy = new House(currentContainer, i*3+j);
-                    currentContainer.addChildAtPosition(dummy.sprite, randomrow+i, randomcol+j);
+                    let dummy = new House(gameContainer, i*3+j);
+                    gameContainer.addChildAtPosition(dummy.sprite, randomrow+i, randomcol+j);
                 }
             }
             break;
@@ -88,7 +92,7 @@ spawnHouse(WoodenHouse);
 function checkSpawnable(row, col){
     if(row < 0 || row >= bgContainer.rows || col < 0 || col >= bgContainer.cols){return false;}
     if(bgContainer.grids[row][col] !== null){return false;}
-    let spi = currentContainer.grids[row][col];
+    let spi = gameContainer.grids[row][col];
     if(spi === null || spi instanceof Enemy || spi instanceof Player || spi instanceof ItemSprite){return true;}
     return false;
 }
@@ -138,11 +142,11 @@ for(let i=0;i<2;i++){
 
 function spawnItem(total, Item){
     for(let _=0;_<total;_++){   // try to spawn "total" Item
-        let item = new Item(currentContainer);
-        let randomrow = getRandomInt(currentContainer.rows);
-        let randomcol = getRandomInt(currentContainer.cols);
-        if(currentContainer.grids[randomrow][randomcol] === null){
-            currentContainer.addChildAtPosition(item.sprite, randomrow, randomcol);
+        let item = new Item(gameContainer);
+        let randomrow = getRandomInt(gameContainer.rows);
+        let randomcol = getRandomInt(gameContainer.cols);
+        if(gameContainer.grids[randomrow][randomcol] === null){
+            gameContainer.addChildAtPosition(item.sprite, randomrow, randomcol);
         }
     }
 }
@@ -153,22 +157,33 @@ spawnItem(3, Broadsword);
 spawnItem(3, Roundshield);
 spawnItem(3, Ring);
 
-window.container = currentContainer;
+window.container = gameContainer;
 
 export function setup() {
+    app.stage.addChild(currentContainer);
+}
+
+export function toGame() {
+    app.stage.removeChild(currentContainer)
+    currentContainer = gameContainer;
     app.stage.addChild(bgContainer);
     app.stage.addChild(currentContainer);
     app.stage.addChild(infoContainer);
 }
+
+introContainer.setToGame(toGame);
+
 export function gameLoop(delta) {
-    currentContainer.position.x = -cursor.x + app.screen.width / 2;
-    currentContainer.position.y = -cursor.y + app.screen.height / 2;
+    if (currentContainer instanceof GameContainer) {
+        currentContainer.position.x = -cursor.x + app.screen.width / 2;
+        currentContainer.position.y = -cursor.y + app.screen.height / 2;
 
-    currentContainer.update();
-    infoContainer.update();
+        currentContainer.update();
+        infoContainer.update();
 
-    bgContainer.position.x = -cursor.x + app.screen.width / 2;
-    bgContainer.position.y = -cursor.y + app.screen.height / 2;
-
-    bgContainer.update();
+        bgContainer.position.x = currentContainer.position.x;
+        bgContainer.position.y = currentContainer.position.y;
+    } else if (currentContainer instanceof InfoContainer) {
+        currentContainer.update();
+    }
 }
