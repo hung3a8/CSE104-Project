@@ -102,9 +102,9 @@ export class Enemy extends CollisionSprite {
 
     move() {
         const path = this.minDistance();
-        if (path.length > this.MAX_PLAYER_FIND) {
-            return;
-        }
+        // if (path.length > this.MAX_PLAYER_FIND) {
+        //     return;
+        // }
 
         let max_range = this.range;
         // Ignore the last element in the path, which is the player and the first element, which is the enemy itself
